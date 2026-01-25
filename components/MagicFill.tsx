@@ -188,17 +188,16 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		<>
 			<button
 				onClick={() => setIsOpen(true)}
-				className='group relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-medium text-white text-sm overflow-hidden transition-all duration-300 hover:scale-105'
+				className='group relative flex items-center justify-center w-9 h-9 rounded-lg font-medium text-white text-sm overflow-hidden transition-all duration-300 hover:scale-105'
 				style={{
 					background:
 						'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)',
 					boxShadow: '0 3px 12px rgba(99, 102, 241, 0.35)'
 				}}
+				title='Magic Fill'
 			>
 				<div className='absolute inset-0 bg-linear-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
 				<Wand2 className='w-4 h-4' />
-				<span>Magic Fill</span>
-				<Sparkles className='w-3.5 h-3.5 opacity-75' />
 			</button>
 			{modalContent && createPortal(modalContent, document.body)}
 		</>

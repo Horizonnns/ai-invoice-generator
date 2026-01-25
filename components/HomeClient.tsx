@@ -255,23 +255,12 @@ export default function HomeClient({ children }: HomeClientProps) {
 				<div className='flex flex-col lg:flex-row gap-6'>
 					{/* Left Column - Form */}
 					<div className='lg:w-1/2 lg:shrink-0'>
-						<div className='mb-3 flex items-center justify-between'>
-							<div className='text-xs text-gray-500 dark:text-slate-400'>
-								{user
-									? 'Signed in: drafts are saved to your account.'
-									: 'Sign in to save drafts and view history.'}
-							</div>
-							<button
-								onClick={handleSaveDraft}
-								className='btn-primary text-xs'
-								disabled={!user || isSaving}
-							>
-								{isSaving ? 'Saving...' : 'Save draft'}
-							</button>
-						</div>
 						<InvoiceForm
 							data={invoiceData}
 							onChange={setInvoiceData}
+							onSaveDraft={handleSaveDraft}
+							canSaveDraft={Boolean(user)}
+							isSaving={isSaving}
 						/>
 					</div>
 
