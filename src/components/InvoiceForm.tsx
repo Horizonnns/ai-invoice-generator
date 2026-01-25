@@ -1,12 +1,7 @@
-import {
-	Building2,
-	Calendar,
-	FileText,
-	MessageSquare,
-	User
-} from 'lucide-react'
+import { Building2, FileText, MessageSquare, User } from 'lucide-react'
 import React from 'react'
 import type { InvoiceData, PartyInfo } from '../types/invoice'
+import DatePicker from './DatePicker'
 import InvoiceItems from './InvoiceItems'
 
 interface InvoiceFormProps {
@@ -53,30 +48,20 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 							className='input-field'
 						/>
 					</div>
-					<div>
-						<label className='block text-xs font-medium text-gray-600 mb-1'>
-							<Calendar className='w-3 h-3 inline mr-1' />
-							Issue Date
-						</label>
-						<input
-							type='date'
-							value={data.issueDate}
-							onChange={e => onChange({ ...data, issueDate: e.target.value })}
-							className='input-field'
-						/>
-					</div>
-					<div>
-						<label className='block text-xs font-medium text-gray-600 mb-1'>
-							<Calendar className='w-3 h-3 inline mr-1' />
-							Due Date
-						</label>
-						<input
-							type='date'
-							value={data.dueDate}
-							onChange={e => onChange({ ...data, dueDate: e.target.value })}
-							className='input-field'
-						/>
-					</div>
+					<DatePicker
+						value={data.issueDate}
+						onChange={(value: string) =>
+							onChange({ ...data, issueDate: value })
+						}
+						label='Issue Date'
+						placeholder='Select issue date'
+					/>
+					<DatePicker
+						value={data.dueDate}
+						onChange={(value: string) => onChange({ ...data, dueDate: value })}
+						label='Due Date'
+						placeholder='Select due date'
+					/>
 				</div>
 			</div>
 
