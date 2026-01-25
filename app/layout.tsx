@@ -6,7 +6,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
 	alternates: {
-		canonical: '/'
+		canonical: '/',
+		languages: {
+			en: '/'
+		}
 	},
 	title: 'AI Invoice Generator - Create Professional Invoices Instantly',
 	description:
@@ -53,7 +56,8 @@ export const metadata: Metadata = {
 		}
 	},
 	icons: {
-		icon: '/favicon.svg'
+		icon: '/favicon.svg',
+		apple: '/icon-192.svg'
 	}
 }
 
