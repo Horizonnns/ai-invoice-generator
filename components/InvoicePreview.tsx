@@ -4,14 +4,14 @@ import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
 import { Download, FileText, Loader2 } from 'lucide-react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
-import type { InvoiceData } from '../types/invoice'
+import type { InvoiceData } from '@/types/invoice'
 import {
 	calculateSubtotal,
 	calculateTax,
 	calculateTotal,
 	formatCurrency,
 	formatDate
-} from '../utils/helpers'
+} from '@/utils/helpers'
 
 interface InvoicePreviewProps {
 	data: InvoiceData

@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-// Initialize OpenAI
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY
-})
-
+// Initialize OpenAI inside the handler to prevent build errors
 export async function POST(request: NextRequest) {
 	try {
 		const { text } = await request.json()
@@ -23,6 +19,10 @@ export async function POST(request: NextRequest) {
 				{ status: 500 }
 			)
 		}
+
+		const openai = new OpenAI({
+			apiKey: process.env.OPENAI_API_KEY
+		})
 
 		const systemPrompt = `You are an AI assistant that extracts invoice information from unstructured text. 
 Extract the following information and return it as JSON:

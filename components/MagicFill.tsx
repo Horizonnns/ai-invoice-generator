@@ -3,7 +3,7 @@
 import { Loader2, Sparkles, Wand2, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { ParsedInvoiceResponse } from '../types/invoice'
+import type { ParsedInvoiceResponse } from '@/types/invoice'
 import VoiceInput from './VoiceInput'
 
 interface MagicFillProps {

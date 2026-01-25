@@ -1,4 +1,4 @@
-import type { InvoiceItem } from '../types/invoice'
+import type { InvoiceItem } from '@/types/invoice'
 
 export const generateId = (): string => {
 	return Math.random().toString(36).substring(2, 11)

@@ -2,8 +2,8 @@
 
 import { Plus, Trash2 } from 'lucide-react'
 import React from 'react'
-import type { InvoiceItem } from '../types/invoice'
-import { calculateItemAmount, createEmptyItem } from '../utils/helpers'
+import type { InvoiceItem } from '@/types/invoice'
+import { calculateItemAmount, createEmptyItem } from '@/utils/helpers'
 
 interface InvoiceItemsProps {
 	items: InvoiceItem[]

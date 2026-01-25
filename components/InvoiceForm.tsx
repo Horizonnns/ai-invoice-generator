@@ -2,7 +2,7 @@
 
 import { Building2, FileText, MessageSquare, User } from 'lucide-react'
 import React from 'react'
-import type { InvoiceData, PartyInfo } from '../types/invoice'
+import type { InvoiceData, PartyInfo } from '@/types/invoice'
 import DatePicker from './DatePicker'
 import InvoiceItems from './InvoiceItems'
 
