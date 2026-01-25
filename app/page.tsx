@@ -14,10 +14,10 @@ import {
 	getTodayDate
 } from '@/utils/helpers'
 import { FileText } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-const initialInvoiceData: InvoiceData = {
-	invoiceNumber: generateInvoiceNumber(),
+const defaultInvoiceData: InvoiceData = {
+	invoiceNumber: '',
 	issueDate: getTodayDate(),
 	dueDate: getDefaultDueDate(),
 	sender: {
@@ -39,9 +39,17 @@ const initialInvoiceData: InvoiceData = {
 
 export default function HomePage() {
 	const [invoiceData, setInvoiceData] =
-		useState<InvoiceData>(initialInvoiceData)
+		useState<InvoiceData>(defaultInvoiceData)
 	const [isDownloading, setIsDownloading] = useState(false)
 	const previewRef = useRef<InvoicePreviewRef>(null)
+
+	// Set initial invoice number on client side to prevent hydration mismatch
+	useEffect(() => {
+		setInvoiceData(prev => ({
+			...prev,
+			invoiceNumber: generateInvoiceNumber()
+		}))
+	}, [])
 
 	const handleDownload = async () => {
 		if (!previewRef.current) return
