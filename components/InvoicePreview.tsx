@@ -1,17 +1,17 @@
 'use client'
 
-import html2canvas from 'html2canvas'
-import { jsPDF } from 'jspdf'
-import { Download, FileText, Loader2 } from 'lucide-react'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
-import type { InvoiceData } from '../types/invoice'
+import type { InvoiceData } from '@/types/invoice'
 import {
 	calculateSubtotal,
 	calculateTax,
 	calculateTotal,
 	formatCurrency,
 	formatDate
-} from '../utils/helpers'
+} from '@/utils/helpers'
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
+import { Download, FileText, Loader2 } from 'lucide-react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InvoicePreviewProps {
 	data: InvoiceData
@@ -97,7 +97,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 		}))
 
 		return (
-			<div className='bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 relative'>
+			<div className='bg-white dark:bg-slate-900 rounded-xl shadow-lg dark:shadow-black/40 overflow-hidden border border-gray-100 dark:border-slate-800 relative'>
 				{/* Download PDF Button - Top Right Corner */}
 				<button
 					onClick={onDownload}
@@ -445,7 +445,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 												color: '#6b7280'
 											}}
 										>
-											{item.quantity}
+											{item.quantity ?? 0}
 										</td>
 										<td
 											style={{
@@ -454,7 +454,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 												color: '#6b7280'
 											}}
 										>
-											{formatCurrency(item.rate)}
+											{formatCurrency(item.rate ?? 0)}
 										</td>
 										<td
 											style={{

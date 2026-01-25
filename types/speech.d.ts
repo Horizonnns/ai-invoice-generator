@@ -1,29 +1,13 @@
-// Web Speech API types
-interface SpeechRecognition extends EventTarget {
-	continuous: boolean
-	interimResults: boolean
-	lang: string
-	start(): void
-	stop(): void
-	abort(): void
-	onerror:
-		| ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
-		| null
-	onresult:
-		| ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
-		| null
-	onend: ((this: SpeechRecognition, ev: Event) => void) | null
+// Web Speech API types definitions
+
+interface SpeechRecognitionErrorEvent extends Event {
+	error: string
+	message: string
 }
 
-interface SpeechRecognitionEvent extends Event {
-	results: SpeechRecognitionResultList
-	resultIndex: number
-}
-
-interface SpeechRecognitionResultList {
-	length: number
-	item(index: number): SpeechRecognitionResult
-	[index: number]: SpeechRecognitionResult
+interface SpeechRecognitionAlternative {
+	transcript: string
+	confidence: number
 }
 
 interface SpeechRecognitionResult {
@@ -33,25 +17,42 @@ interface SpeechRecognitionResult {
 	isFinal: boolean
 }
 
-interface SpeechRecognitionAlternative {
-	transcript: string
-	confidence: number
+interface SpeechRecognitionResultList {
+	length: number
+	item(index: number): SpeechRecognitionResult
+	[index: number]: SpeechRecognitionResult
 }
 
-interface SpeechRecognitionErrorEvent extends Event {
-	error: string
-	message: string
+interface SpeechRecognitionEvent extends Event {
+	results: SpeechRecognitionResultList
+	resultIndex: number
 }
 
-declare global {
-	interface Window {
-		SpeechRecognition: {
-			new (): SpeechRecognition
-		}
-		webkitSpeechRecognition: {
-			new (): SpeechRecognition
-		}
-	}
+interface SpeechRecognition extends EventTarget {
+	continuous: boolean
+	interimResults: boolean
+	lang: string
+	start(): void
+	stop(): void
+	abort(): void
+	onerror:
+		| ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any)
+		| null
+	onresult:
+		| ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any)
+		| null
+	onend: ((this: SpeechRecognition, ev: Event) => any) | null
 }
 
-export {}
+interface SpeechRecognitionConstructor {
+	new (): SpeechRecognition
+}
+
+declare var SpeechRecognition: SpeechRecognitionConstructor
+declare var webkitSpeechRecognition: SpeechRecognitionConstructor
+
+// Extend Window interface
+interface Window {
+	SpeechRecognition: SpeechRecognitionConstructor
+	webkitSpeechRecognition: SpeechRecognitionConstructor
+}

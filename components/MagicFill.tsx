@@ -1,9 +1,9 @@
 'use client'
 
+import type { ParsedInvoiceResponse } from '@/types/invoice'
 import { Loader2, Sparkles, Wand2, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { ParsedInvoiceResponse } from '../types/invoice'
 import VoiceInput from './VoiceInput'
 
 interface MagicFillProps {
@@ -35,7 +35,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		setError(null)
 
 		try {
-			const response = await fetch('/api/magic-fill', {
+			const response = await fetch('http://localhost:3000/api/parse-invoice', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 				}
 			}}
 		>
-			<div className='bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden'>
+			<div className='bg-white dark:bg-slate-900 dark:text-slate-100 rounded-xl shadow-2xl w-full max-w-md overflow-hidden'>
 				{/* Header */}
 				<div
 					className='px-4 py-3 flex items-center justify-between'
@@ -122,15 +122,15 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 					/>
 
 					{error && (
-						<div className='mt-2 p-2 bg-red-50 border border-red-200 rounded-md text-red-600 text-xs'>
+						<div className='mt-2 p-2 bg-red-50 border border-red-200 text-red-600 dark:bg-red-950/40 dark:border-red-900/60 dark:text-red-300 rounded-md text-xs'>
 							{error}
 						</div>
 					)}
 
 					{/* Voice Input */}
-					<div className='mt-3 flex items-center justify-between p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
-						<span className='text-xs font-medium text-indigo-700'>
-							Или используйте голосовой ввод:
+					<div className='mt-3 flex items-center justify-between p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/15 dark:to-purple-500/15 rounded-lg border border-indigo-100 dark:border-indigo-500/30'>
+						<span className='text-xs font-medium text-indigo-700 dark:text-indigo-200'>
+							Or use voice input:
 						</span>
 						<VoiceInput
 							onTranscript={transcript => setText(transcript)}
@@ -168,11 +168,11 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 
 				{/* Tips */}
 				<div className='px-4 pb-4'>
-					<div className='p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
-						<p className='text-xs text-indigo-700 font-medium mb-1.5'>
+					<div className='p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/15 dark:to-purple-500/15 rounded-lg border border-indigo-100 dark:border-indigo-500/30'>
+						<p className='text-xs text-indigo-700 dark:text-indigo-200 font-medium mb-1.5'>
 							💡 Tips for best results:
 						</p>
-						<ul className='text-[11px] text-indigo-600 space-y-0.5'>
+						<ul className='text-[11px] text-indigo-600 dark:text-indigo-200/80 space-y-0.5'>
 							<li>• Include your business name and contact info</li>
 							<li>• Mention the client's name and company</li>
 							<li>• Describe services with quantities and rates</li>
@@ -194,7 +194,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 					boxShadow: '0 3px 12px rgba(99, 102, 241, 0.35)'
 				}}
 			>
-				<div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
+				<div className='absolute inset-0 bg-linear-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
 				<Wand2 className='w-4 h-4' />
 				<span>Magic Fill</span>
 				<Sparkles className='w-3.5 h-3.5 opacity-75' />

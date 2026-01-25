@@ -1,4 +1,4 @@
-import type { InvoiceItem } from '../types/invoice'
+import type { InvoiceItem } from '@/types/invoice'
 
 export const generateId = (): string => {
 	return Math.random().toString(36).substring(2, 11)
@@ -30,8 +30,13 @@ export const formatDate = (dateString: string): string => {
 	})
 }
 
-export const calculateItemAmount = (quantity: number, rate: number): number => {
-	return quantity * rate
+export const calculateItemAmount = (
+	quantity: number | undefined,
+	rate: number | undefined
+): number => {
+	const q = quantity ?? 0
+	const r = rate ?? 0
+	return q * r
 }
 
 export const calculateSubtotal = (items: InvoiceItem[]): number => {
@@ -60,6 +65,6 @@ export const createEmptyItem = (): InvoiceItem => ({
 	id: generateId(),
 	description: '',
 	quantity: 1,
-	rate: 0,
+	rate: undefined,
 	amount: 0
 })

@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 /* Theme configuration for Tailwind 4 */
 @theme {
 	--font-family-sans:
@@ -32,6 +34,7 @@
 		background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
 		min-height: 100vh;
 		color: #1e293b;
+		color-scheme: light;
 		line-height: 1.5;
 		font-size: 14px;
 		-webkit-font-smoothing: antialiased;
@@ -193,5 +196,74 @@
 		color: #64748b;
 		font-size: 12px;
 		font-weight: 500;
+	}
+}
+
+:root[data-theme='dark'] body {
+	background:
+		radial-gradient(circle at top right, rgba(79, 70, 229, 0.18), transparent 45%),
+		linear-gradient(135deg, #0b1020 0%, #0f172a 55%, #0b1222 100%);
+	color: #e2e8f0;
+	color-scheme: dark;
+}
+
+:root[data-theme='dark'] ::-webkit-scrollbar-track {
+	background: #0f172a;
+}
+
+:root[data-theme='dark'] ::-webkit-scrollbar-thumb {
+	background: #334155;
+}
+
+:root[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+	background: #475569;
+}
+
+@layer components {
+	:root[data-theme='dark'] .animate-shimmer {
+		background: linear-gradient(90deg, #111827 25%, #1f2937 50%, #111827 75%);
+	}
+
+	:root[data-theme='dark'] .glass {
+		background: rgba(15, 23, 42, 0.82) !important;
+		border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+	}
+
+	:root[data-theme='dark'] .btn-secondary {
+		background: #0f172a !important;
+		color: #e2e8f0 !important;
+		border-color: #1f2937 !important;
+	}
+
+	:root[data-theme='dark'] .btn-secondary:hover {
+		background: #111827 !important;
+		border-color: #334155 !important;
+	}
+
+	:root[data-theme='dark'] .input-field {
+		background: #0f172a !important;
+		color: #e2e8f0;
+		border-color: #1f2937 !important;
+	}
+
+	:root[data-theme='dark'] .input-field:focus {
+		border-color: #7c74ff !important;
+		box-shadow: 0 0 0 2px rgba(124, 116, 255, 0.2);
+	}
+
+	:root[data-theme='dark'] .input-field::placeholder {
+		color: #64748b;
+	}
+
+	:root[data-theme='dark'] .card {
+		background: #0f172a !important;
+		border-color: #1e293b !important;
+		box-shadow: 0 8px 24px rgba(2, 6, 23, 0.35);
+	}
+
+	:root[data-theme='dark'] .adsense-placeholder {
+		background: linear-gradient(135deg, #0f172a 0%, #111827 100%) !important;
+		border-color: #334155 !important;
+		color: #94a3b8;
 	}
 }
