@@ -35,7 +35,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		setError(null)
 
 		try {
-			const response = await fetch('/api/magic-fill', {
+			const response = await fetch('http://localhost:3000/api/parse-invoice', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
