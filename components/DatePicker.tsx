@@ -20,8 +20,23 @@ const DatePicker: React.FC<DatePickerProps> = ({
 	const [currentMonth, setCurrentMonth] = useState(new Date())
 	const containerRef = useRef<HTMLDivElement>(null)
 
+	// Helper to create a date object from YYYY-MM-DD string treating it as local date
+	const parseLocalDate = (dateString: string) => {
+		if (!dateString) return null
+		const [year, month, day] = dateString.split('-').map(Number)
+		return new Date(year, month - 1, day)
+	}
+
+	// Helper to format date as YYYY-MM-DD using local time
+	const formatToLocalDate = (date: Date) => {
+		const year = date.getFullYear()
+		const month = String(date.getMonth() + 1).padStart(2, '0')
+		const day = String(date.getDate()).padStart(2, '0')
+		return `${year}-${month}-${day}`
+	}
+
 	// Parse the value to Date or use current date
-	const selectedDate = value ? new Date(value) : null
+	const selectedDate = value ? parseLocalDate(value) : null
 
 	// Close dropdown when clicking outside
 	useEffect(() => {
@@ -77,7 +92,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 		const year = currentMonth.getFullYear()
 		const month = currentMonth.getMonth()
 		const date = new Date(year, month, day)
-		const formattedDate = date.toISOString().split('T')[0]
+		const formattedDate = formatToLocalDate(date)
 		onChange(formattedDate)
 		setIsOpen(false)
 	}
@@ -96,7 +111,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
 	const handleToday = () => {
 		const today = new Date()
-		const formattedDate = today.toISOString().split('T')[0]
+		const formattedDate = formatToLocalDate(today)
 		onChange(formattedDate)
 		setIsOpen(false)
 	}
