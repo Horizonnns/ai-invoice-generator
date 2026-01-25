@@ -1,9 +1,9 @@
 'use client'
 
+import type { ParsedInvoiceResponse } from '@/types/invoice'
 import { Loader2, Sparkles, Wand2, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { ParsedInvoiceResponse } from '@/types/invoice'
 import VoiceInput from './VoiceInput'
 
 interface MagicFillProps {
@@ -128,9 +128,9 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 					)}
 
 					{/* Voice Input */}
-					<div className='mt-3 flex items-center justify-between p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
+					<div className='mt-3 flex items-center justify-between p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
 						<span className='text-xs font-medium text-indigo-700'>
-							Или используйте голосовой ввод:
+							Or use voice input:
 						</span>
 						<VoiceInput
 							onTranscript={transcript => setText(transcript)}
