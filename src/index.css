@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+/* Theme configuration for Tailwind 4 */
+@theme {
+	--font-family-sans:
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+	--color-primary: #635bff;
+	--color-primary-dark: #5850ec;
+	--color-primary-light: #7c74ff;
+	--color-secondary: #0a2540;
+	--color-accent: #00d4ff;
+}
+
+/* Base styles */
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	body {
+		font-family:
+			'Inter',
+			-apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			Roboto,
+			sans-serif;
+		background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+		min-height: 100vh;
+		color: #1e293b;
+		line-height: 1.5;
+		font-size: 14px;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: #f1f5f9;
+		border-radius: 3px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #cbd5e1;
+		border-radius: 3px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #94a3b8;
+	}
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+/* Component styles */
+@layer components {
+	.animate-fade-in {
+		animation: fadeIn 0.25s ease-out forwards;
+	}
+
+	.animate-shimmer {
+		background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+	}
+
+	/* Glassmorphism effect */
+	.glass {
+		background: rgba(255, 255, 255, 0.9) !important;
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+	}
+
+	/* Button styles - Compact */
+	.btn-primary {
+		background: linear-gradient(135deg, #635bff 0%, #5850ec 100%) !important;
+		color: white !important;
+		font-weight: 500;
+		font-size: 13px;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		border: none;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		box-shadow: 0 2px 8px rgba(99, 91, 255, 0.25);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.375rem;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(99, 91, 255, 0.35);
+	}
+
+	.btn-primary:active {
+		transform: translateY(0);
+	}
+
+	.btn-primary:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	.btn-secondary {
+		background: white !important;
+		color: #334155 !important;
+		font-weight: 500;
+		font-size: 13px;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		border: 1px solid #e2e8f0 !important;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.btn-secondary:hover {
+		background: #f8fafc !important;
+		border-color: #cbd5e1 !important;
+	}
+
+	/* Input styles - Compact */
+	.input-field {
+		width: 100%;
+		padding: 0.5rem 0.75rem;
+		border: 1px solid #e2e8f0 !important;
+		border-radius: 0.5rem;
+		font-size: 13px;
+		font-family: inherit;
+		transition: all 0.15s ease;
+		background: white !important;
+		color: #1e293b;
+	}
+
+	.input-field:focus {
+		outline: none;
+		border-color: #635bff !important;
+		box-shadow: 0 0 0 2px rgba(99, 91, 255, 0.12);
+	}
+
+	.input-field::placeholder {
+		color: #94a3b8;
+		font-size: 13px;
+	}
+
+	/* Card styles - Compact */
+	.card {
+		background: white !important;
+		border-radius: 0.75rem;
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+		border: 1px solid #f1f5f9 !important;
+	}
+
+	/* AdSense placeholder styles */
+	.adsense-placeholder {
+		background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+		border: 2px dashed #cbd5e1 !important;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #64748b;
+		font-size: 12px;
+		font-weight: 500;
+	}
+}
