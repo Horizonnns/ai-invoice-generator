@@ -1,7 +1,14 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+
+const inter = Inter({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-inter'
+})
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
@@ -89,6 +96,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang='en'
+			className={inter.variable}
 			suppressHydrationWarning
 		>
 			<head>
