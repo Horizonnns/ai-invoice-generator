@@ -168,7 +168,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 
 				{/* Tips */}
 				<div className='px-4 pb-4'>
-					<div className='p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
+					<div className='p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
 						<p className='text-xs text-indigo-700 font-medium mb-1.5'>
 							💡 Tips for best results:
 						</p>
@@ -194,7 +194,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 					boxShadow: '0 3px 12px rgba(99, 102, 241, 0.35)'
 				}}
 			>
-				<div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
+				<div className='absolute inset-0 bg-linear-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
 				<Wand2 className='w-4 h-4' />
 				<span>Magic Fill</span>
 				<Sparkles className='w-3.5 h-3.5 opacity-75' />

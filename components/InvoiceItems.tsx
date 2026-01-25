@@ -1,9 +1,9 @@
 'use client'
 
-import { Plus, Trash2 } from 'lucide-react'
-import React from 'react'
 import type { InvoiceItem } from '@/types/invoice'
 import { calculateItemAmount, createEmptyItem } from '@/utils/helpers'
+import { Plus, Trash2 } from 'lucide-react'
+import React from 'react'
 
 interface InvoiceItemsProps {
 	items: InvoiceItem[]
@@ -24,7 +24,7 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 	const handleItemChange = (
 		id: string,
 		field: keyof InvoiceItem,
-		value: string | number
+		value: string | number | undefined
 	) => {
 		onChange(
 			items.map(item => {
@@ -34,10 +34,15 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 
 				// Auto-calculate amount when quantity or rate changes
 				if (field === 'quantity' || field === 'rate') {
-					updatedItem.amount = calculateItemAmount(
-						field === 'quantity' ? Number(value) : item.quantity,
-						field === 'rate' ? Number(value) : item.rate
-					)
+					const newVal =
+						value === '' ? undefined : (value as number | undefined)
+					const q =
+						field === 'quantity'
+							? newVal
+							: (item.quantity as number | undefined)
+					const r =
+						field === 'rate' ? newVal : (item.rate as number | undefined)
+					updatedItem.amount = calculateItemAmount(q, r)
 				}
 
 				return updatedItem
@@ -80,10 +85,10 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 						<div className='col-span-5'>
 							<input
 								type='text'
-								value={item.description}
 								onChange={e =>
 									handleItemChange(item.id, 'description', e.target.value)
 								}
+								value={item.description}
 								placeholder='Service description'
 								className='input-field'
 							/>
@@ -92,12 +97,14 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 							<input
 								type='number'
 								min='1'
-								value={item.quantity}
+								value={item.quantity ?? ''}
 								onChange={e =>
 									handleItemChange(
 										item.id,
 										'quantity',
-										parseFloat(e.target.value) || 0
+										e.target.value === ''
+											? undefined
+											: parseFloat(e.target.value)
 									)
 								}
 								className='input-field text-center'
@@ -112,12 +119,14 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 									type='number'
 									min='0'
 									step='0.01'
-									value={item.rate}
+									value={item.rate ?? ''}
 									onChange={e =>
 										handleItemChange(
 											item.id,
 											'rate',
-											parseFloat(e.target.value) || 0
+											e.target.value === ''
+												? undefined
+												: parseFloat(e.target.value)
 										)
 									}
 									className='input-field pl-5 text-center'

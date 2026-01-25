@@ -34,7 +34,7 @@ const defaultInvoiceData: InvoiceData = {
 	},
 	items: [createEmptyItem()],
 	notes: '',
-	tax: 0
+	tax: undefined
 }
 
 export default function HomePage() {
@@ -110,7 +110,7 @@ export default function HomePage() {
 				<div className='mx-auto px-4 sm:px-6'>
 					<div className='flex items-center justify-between h-14'>
 						<div className='flex items-center gap-2.5'>
-							<div className='p-1.5 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-md shadow-indigo-500/25'>
+							<div className='p-1.5 bg-linear-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-md shadow-indigo-500/25'>
 								<FileText className='w-5 h-5 text-white' />
 							</div>
 							<div>

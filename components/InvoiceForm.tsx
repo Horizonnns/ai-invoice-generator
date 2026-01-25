@@ -1,8 +1,8 @@
 'use client'
 
+import type { InvoiceData, PartyInfo } from '@/types/invoice'
 import { Building2, FileText, MessageSquare, User } from 'lucide-react'
 import React from 'react'
-import type { InvoiceData, PartyInfo } from '@/types/invoice'
 import DatePicker from './DatePicker'
 import InvoiceItems from './InvoiceItems'
 
@@ -231,9 +231,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 						min='0'
 						max='100'
 						step='0.1'
-						value={data.tax || 0}
+						value={data.tax ?? ''}
 						onChange={e =>
-							onChange({ ...data, tax: parseFloat(e.target.value) || 0 })
+							onChange({
+								...data,
+								tax:
+									e.target.value === '' ? undefined : parseFloat(e.target.value)
+							})
 						}
 						placeholder='0'
 						className='input-field'

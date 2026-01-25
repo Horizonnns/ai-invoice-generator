@@ -1,9 +1,5 @@
 'use client'
 
-import html2canvas from 'html2canvas'
-import { jsPDF } from 'jspdf'
-import { Download, FileText, Loader2 } from 'lucide-react'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
 import type { InvoiceData } from '@/types/invoice'
 import {
 	calculateSubtotal,
@@ -12,6 +8,10 @@ import {
 	formatCurrency,
 	formatDate
 } from '@/utils/helpers'
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
+import { Download, FileText, Loader2 } from 'lucide-react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InvoicePreviewProps {
 	data: InvoiceData
@@ -445,7 +445,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 												color: '#6b7280'
 											}}
 										>
-											{item.quantity}
+											{item.quantity ?? 0}
 										</td>
 										<td
 											style={{
@@ -454,7 +454,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 												color: '#6b7280'
 											}}
 										>
-											{formatCurrency(item.rate)}
+											{formatCurrency(item.rate ?? 0)}
 										</td>
 										<td
 											style={{
