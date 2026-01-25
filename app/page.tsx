@@ -5,6 +5,7 @@ import InvoicePreview, {
 	type InvoicePreviewRef
 } from '@/components/InvoicePreview'
 import MagicFill from '@/components/MagicFill'
+import ThemeToggle from '@/components/ThemeToggle'
 import type { InvoiceData, ParsedInvoiceResponse } from '@/types/invoice'
 import {
 	calculateItemAmount,
@@ -106,7 +107,7 @@ export default function HomePage() {
 	return (
 		<div className='min-h-screen'>
 			{/* Header */}
-			<header className='sticky top-0 z-40 glass border-b border-gray-200/50'>
+			<header className='sticky top-0 z-40 glass border-b border-gray-200/50 dark:border-slate-800/70'>
 				<div className='mx-auto px-4 sm:px-6'>
 					<div className='flex items-center justify-between h-14'>
 						<div className='flex items-center gap-2.5'>
@@ -114,15 +115,18 @@ export default function HomePage() {
 								<FileText className='w-5 h-5 text-white' />
 							</div>
 							<div>
-								<h1 className='text-lg font-bold text-gray-900'>
+								<h1 className='text-lg font-bold text-gray-900 dark:text-slate-100'>
 									AI Invoice Generator
 								</h1>
-								<p className='text-[11px] text-gray-500 -mt-0.5'>
+								<p className='text-[11px] text-gray-500 dark:text-slate-400 -mt-0.5'>
 									Create professional invoices instantly
 								</p>
 							</div>
 						</div>
-						<MagicFill onFill={handleMagicFill} />
+						<div className='flex items-center gap-2.5'>
+							<ThemeToggle />
+							<MagicFill onFill={handleMagicFill} />
+						</div>
 					</div>
 				</div>
 			</header>
@@ -151,15 +155,15 @@ export default function HomePage() {
 			</main>
 
 			{/* Footer */}
-			<footer className='py-5 mt-6 border-t border-gray-200 bg-white/50'>
+			<footer className='py-5 mt-6 border-t border-gray-200 bg-white/50 dark:border-slate-800/70 dark:bg-slate-900/50'>
 				<div className='mx-auto px-4 sm:px-6'>
 					<div className='flex flex-col md:flex-row items-center justify-between gap-3'>
-						<div className='flex items-center gap-2 text-gray-500 text-xs'>
+						<div className='flex items-center gap-2 text-gray-500 dark:text-slate-400 text-xs'>
 							<FileText className='w-3.5 h-3.5' />
 							<span>AI Invoice Generator</span>
 						</div>
 
-						<p className='text-gray-400 text-xs'>
+						<p className='text-gray-400 dark:text-slate-500 text-xs'>
 							© {new Date().getFullYear()} All rights reserved
 						</p>
 					</div>

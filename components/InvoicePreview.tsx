@@ -97,7 +97,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 		}))
 
 		return (
-			<div className='bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 relative'>
+			<div className='bg-white dark:bg-slate-900 rounded-xl shadow-lg dark:shadow-black/40 overflow-hidden border border-gray-100 dark:border-slate-800 relative'>
 				{/* Download PDF Button - Top Right Corner */}
 				<button
 					onClick={onDownload}

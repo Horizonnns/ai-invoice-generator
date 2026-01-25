@@ -145,7 +145,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 			ref={containerRef}
 			className='relative'
 		>
-			<label className='block text-xs font-medium text-gray-600 mb-1'>
+			<label className='block text-xs font-medium text-gray-600 dark:text-slate-300 mb-1'>
 				<Calendar className='w-3 h-3 inline mr-1' />
 				{label}
 			</label>
@@ -159,35 +159,45 @@ const DatePicker: React.FC<DatePickerProps> = ({
 					focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
 					text-left flex items-center justify-between'
 			>
-				<span className={value ? 'text-gray-800' : 'text-gray-400'}>
+				<span
+					className={
+						value
+							? 'text-gray-800 dark:text-slate-100'
+							: 'text-gray-400 dark:text-slate-500'
+					}
+				>
 					{value ? formatDate(selectedDate) : placeholder}
 				</span>
 				<Calendar
 					className={`w-4 h-4 transition-colors ${
-						isOpen ? 'text-indigo-500' : 'text-gray-400'
+						isOpen
+							? 'text-indigo-500'
+							: 'text-gray-400 dark:text-slate-500'
 					}`}
 				/>
 			</button>
 
 			{/* Calendar Dropdown */}
 			{isOpen && (
-				<div className='absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 w-80 animate-fade-in'>
+				<div className='absolute top-full left-0 mt-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-gray-200 dark:border-slate-800 p-4 z-50 w-80 animate-fade-in'>
 					{/* Header */}
 					<div className='flex items-center justify-between mb-4'>
 						<button
 							type='button'
 							onClick={handlePrevMonth}
-							className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+							className='p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors'
 						>
-							<ChevronLeft className='w-5 h-5 text-gray-600' />
+							<ChevronLeft className='w-5 h-5 text-gray-600 dark:text-slate-300' />
 						</button>
-						<h3 className='font-semibold text-gray-800'>{monthYear}</h3>
+						<h3 className='font-semibold text-gray-800 dark:text-slate-100'>
+							{monthYear}
+						</h3>
 						<button
 							type='button'
 							onClick={handleNextMonth}
-							className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+							className='p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors'
 						>
-							<ChevronRight className='w-5 h-5 text-gray-600' />
+							<ChevronRight className='w-5 h-5 text-gray-600 dark:text-slate-300' />
 						</button>
 					</div>
 
@@ -196,7 +206,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 						{['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
 							<div
 								key={day}
-								className='text-center text-xs font-medium text-gray-500 py-2'
+								className='text-center text-xs font-medium text-gray-500 dark:text-slate-400 py-2'
 							>
 								{day}
 							</div>
@@ -220,8 +230,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
 												isSelected(day)
 													? 'bg-linear-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-md scale-105'
 													: isToday(day)
-														? 'bg-indigo-50 text-indigo-600 border-2 border-indigo-200'
-														: 'text-gray-700 hover:bg-gray-100'
+														? 'bg-indigo-50 text-indigo-600 border-2 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/40'
+														: 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800'
 											}
 										`}
 									>
@@ -235,18 +245,18 @@ const DatePicker: React.FC<DatePickerProps> = ({
 					</div>
 
 					{/* Footer */}
-					<div className='flex items-center justify-between mt-4 pt-4 border-t border-gray-200'>
+					<div className='flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-slate-800'>
 						<button
 							type='button'
 							onClick={handleToday}
-							className='text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors'
+							className='text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200 transition-colors'
 						>
 							Today
 						</button>
 						<button
 							type='button'
 							onClick={() => setIsOpen(false)}
-							className='text-sm font-medium text-gray-600 hover:text-gray-700 transition-colors'
+							className='text-sm font-medium text-gray-600 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-200 transition-colors'
 						>
 							Close
 						</button>

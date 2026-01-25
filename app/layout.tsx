@@ -45,18 +45,39 @@ export const metadata: Metadata = {
 	}
 }
 
+const themeScript = `
+(() => {
+  try {
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  } catch (error) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.classList.remove('dark');
+  }
+})();
+`
+
 export default function RootLayout({
 	children
 }: Readonly<{
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang='en'>
+		<html
+			lang='en'
+			suppressHydrationWarning
+		>
 			<head>
 				<link
 					rel='icon'
 					type='image/svg+xml'
 					href='/vite.svg'
+				/>
+				<script
+					dangerouslySetInnerHTML={{ __html: themeScript }}
 				/>
 			</head>
 			<body>{children}</body>
