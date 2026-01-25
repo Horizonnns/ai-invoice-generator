@@ -1,13 +1,13 @@
 'use client'
 
+import AuthControls from '@/components/AuthControls'
 import InvoiceForm from '@/components/InvoiceForm'
+import InvoiceHistory from '@/components/InvoiceHistory'
 import InvoicePreview, {
 	type InvoicePreviewRef
 } from '@/components/InvoicePreview'
 import MagicFill from '@/components/MagicFill'
 import ThemeToggle from '@/components/ThemeToggle'
-import AuthControls from '@/components/AuthControls'
-import InvoiceHistory from '@/components/InvoiceHistory'
 import type {
 	AuthUser,
 	InvoiceData,
@@ -234,8 +234,8 @@ export default function HomeClient({ children }: HomeClientProps) {
 							</div>
 						</div>
 						<div className='flex items-center gap-2.5'>
-							<ThemeToggle />
 							<MagicFill onFill={handleMagicFill} />
+							<ThemeToggle />
 							<AuthControls
 								user={user}
 								onAuth={setUser}
@@ -267,9 +267,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 					{/* Right Column - Preview */}
 					<div className='w-full sticky top-20'>
 						{historyError ? (
-							<div className='mb-3 text-xs text-red-500'>
-								{historyError}
-							</div>
+							<div className='mb-3 text-xs text-red-500'>{historyError}</div>
 						) : null}
 						{user ? (
 							<div className='mb-4'>

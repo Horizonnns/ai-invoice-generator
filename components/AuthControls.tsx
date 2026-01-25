@@ -122,6 +122,13 @@ export default function AuthControls({
 		<div className='flex items-center gap-2'>
 			{user ? (
 				<>
+					<button
+						onClick={handleLogout}
+						className='group relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 bg-white/70 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+					>
+						<LogOut className='w-3.5 h-3.5' />
+					</button>
+
 					<div className='flex items-center gap-2 text-xs text-gray-600 dark:text-slate-300'>
 						{user.picture ? (
 							<img
@@ -132,13 +139,6 @@ export default function AuthControls({
 						) : null}
 						<span>{user.name ?? user.email}</span>
 					</div>
-					<button
-						onClick={handleLogout}
-						className='btn-secondary flex items-center gap-1.5 text-xs'
-					>
-						<LogOut className='w-3.5 h-3.5' />
-						Sign out
-					</button>
 				</>
 			) : (
 				<div
@@ -147,7 +147,11 @@ export default function AuthControls({
 					aria-label='Sign in with Google'
 				>
 					<div className='flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 bg-white shadow-sm'>
-						<svg aria-hidden='true' viewBox='0 0 48 48' className='w-4.5 h-4.5'>
+						<svg
+							aria-hidden='true'
+							viewBox='0 0 48 48'
+							className='w-4.5 h-4.5'
+						>
 							<path
 								fill='#EA4335'
 								d='M24 9.5c3.1 0 5.9 1.1 8.1 2.9l6-6C34.5 2.9 29.5 1 24 1 14.6 1 6.4 6.7 2.5 14.9l6.9 5.4C11.2 13.7 17.1 9.5 24 9.5z'
