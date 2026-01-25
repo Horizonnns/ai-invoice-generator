@@ -2,6 +2,7 @@ import { Loader2, Sparkles, Wand2, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { ParsedInvoiceResponse } from '../types/invoice'
+import VoiceInput from './VoiceInput'
 
 interface MagicFillProps {
 	onFill: (data: ParsedInvoiceResponse) => void
@@ -123,6 +124,17 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 							{error}
 						</div>
 					)}
+
+					{/* Voice Input */}
+					<div className='mt-3 flex items-center justify-between p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-100'>
+						<span className='text-xs font-medium text-indigo-700'>
+							Или используйте голосовой ввод:
+						</span>
+						<VoiceInput
+							onTranscript={transcript => setText(transcript)}
+							disabled={isLoading}
+						/>
+					</div>
 
 					<div className='mt-3 flex gap-2'>
 						<button
