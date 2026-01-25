@@ -6,7 +6,14 @@ import InvoicePreview, {
 } from '@/components/InvoicePreview'
 import MagicFill from '@/components/MagicFill'
 import ThemeToggle from '@/components/ThemeToggle'
-import type { InvoiceData, ParsedInvoiceResponse } from '@/types/invoice'
+import AuthControls from '@/components/AuthControls'
+import InvoiceHistory from '@/components/InvoiceHistory'
+import type {
+	AuthUser,
+	InvoiceData,
+	InvoiceRecord,
+	ParsedInvoiceResponse
+} from '@/types/invoice'
 import {
 	calculateItemAmount,
 	createEmptyItem,
@@ -43,10 +50,15 @@ type HomeClientProps = {
 }
 
 export default function HomeClient({ children }: HomeClientProps) {
+	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
 	const [invoiceData, setInvoiceData] =
 		useState<InvoiceData>(defaultInvoiceData)
 	const [isDownloading, setIsDownloading] = useState(false)
 	const previewRef = useRef<InvoicePreviewRef>(null)
+	const [user, setUser] = useState<AuthUser | null>(null)
+	const [history, setHistory] = useState<InvoiceRecord[]>([])
+	const [historyError, setHistoryError] = useState<string | null>(null)
+	const [isSaving, setIsSaving] = useState(false)
 
 	// Set initial invoice number on client side to prevent hydration mismatch
 	useEffect(() => {
@@ -55,6 +67,48 @@ export default function HomeClient({ children }: HomeClientProps) {
 			invoiceNumber: generateInvoiceNumber()
 		}))
 	}, [])
+
+	useEffect(() => {
+		const loadSession = async () => {
+			try {
+				const res = await fetch(`${apiBaseUrl}/api/auth/me`, {
+					credentials: 'include'
+				})
+				if (!res.ok) return
+				const data = await res.json()
+				setUser(data.user ?? null)
+			} catch {
+				setUser(null)
+			}
+		}
+		loadSession()
+	}, [apiBaseUrl])
+
+	useEffect(() => {
+		if (!user) {
+			setHistory([])
+			return
+		}
+
+		const loadHistory = async () => {
+			setHistoryError(null)
+			try {
+				const res = await fetch(`${apiBaseUrl}/api/invoices`, {
+					credentials: 'include'
+				})
+				if (!res.ok) {
+					throw new Error('Failed to load history')
+				}
+				const data = await res.json()
+				setHistory(data.invoices ?? [])
+			} catch (error) {
+				setHistoryError(
+					error instanceof Error ? error.message : 'Failed to load history'
+				)
+			}
+		}
+		loadHistory()
+	}, [apiBaseUrl, user])
 
 	const handleDownload = async () => {
 		if (!previewRef.current) return
@@ -108,6 +162,58 @@ export default function HomeClient({ children }: HomeClientProps) {
 		setInvoiceData(updatedData)
 	}
 
+	const handleSaveDraft = async () => {
+		if (!user) return
+		setIsSaving(true)
+		setHistoryError(null)
+		try {
+			const res = await fetch(`${apiBaseUrl}/api/invoices`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include',
+				body: JSON.stringify({
+					status: 'draft',
+					data: invoiceData
+				})
+			})
+			if (!res.ok) {
+				throw new Error('Failed to save draft')
+			}
+			const data = await res.json()
+			setHistory(prev => [data.invoice, ...prev])
+		} catch (error) {
+			setHistoryError(
+				error instanceof Error ? error.message : 'Failed to save draft'
+			)
+		} finally {
+			setIsSaving(false)
+		}
+	}
+
+	const handleLoadInvoice = (invoice: InvoiceRecord) => {
+		setInvoiceData(invoice.data)
+	}
+
+	const handleDeleteInvoice = async (id: string) => {
+		setHistoryError(null)
+		try {
+			const res = await fetch(`${apiBaseUrl}/api/invoices/${id}`, {
+				method: 'DELETE',
+				credentials: 'include'
+			})
+			if (!res.ok) {
+				throw new Error('Failed to delete invoice')
+			}
+			setHistory(prev => prev.filter(item => item.id !== id))
+		} catch (error) {
+			setHistoryError(
+				error instanceof Error ? error.message : 'Failed to delete invoice'
+			)
+		}
+	}
+
 	return (
 		<div className='min-h-screen'>
 			{/* Header */}
@@ -130,6 +236,11 @@ export default function HomeClient({ children }: HomeClientProps) {
 						<div className='flex items-center gap-2.5'>
 							<ThemeToggle />
 							<MagicFill onFill={handleMagicFill} />
+							<AuthControls
+								user={user}
+								onAuth={setUser}
+								apiBaseUrl={apiBaseUrl}
+							/>
 						</div>
 					</div>
 				</div>
@@ -144,6 +255,20 @@ export default function HomeClient({ children }: HomeClientProps) {
 				<div className='flex flex-col lg:flex-row gap-6'>
 					{/* Left Column - Form */}
 					<div className='lg:w-1/2 lg:shrink-0'>
+						<div className='mb-3 flex items-center justify-between'>
+							<div className='text-xs text-gray-500 dark:text-slate-400'>
+								{user
+									? 'Signed in: drafts are saved to your account.'
+									: 'Sign in to save drafts and view history.'}
+							</div>
+							<button
+								onClick={handleSaveDraft}
+								className='btn-primary text-xs'
+								disabled={!user || isSaving}
+							>
+								{isSaving ? 'Saving...' : 'Save draft'}
+							</button>
+						</div>
 						<InvoiceForm
 							data={invoiceData}
 							onChange={setInvoiceData}
@@ -152,6 +277,20 @@ export default function HomeClient({ children }: HomeClientProps) {
 
 					{/* Right Column - Preview */}
 					<div className='w-full sticky top-20'>
+						{historyError ? (
+							<div className='mb-3 text-xs text-red-500'>
+								{historyError}
+							</div>
+						) : null}
+						{user ? (
+							<div className='mb-4'>
+								<InvoiceHistory
+									invoices={history}
+									onLoad={handleLoadInvoice}
+									onDelete={handleDeleteInvoice}
+								/>
+							</div>
+						) : null}
 						<InvoicePreview
 							ref={previewRef}
 							data={invoiceData}

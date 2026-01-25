@@ -11,6 +11,7 @@ interface MagicFillProps {
 }
 
 const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
+	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
 	const [isOpen, setIsOpen] = useState(false)
 	const [text, setText] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
@@ -35,7 +36,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		setError(null)
 
 		try {
-			const response = await fetch('http://localhost:3000/api/parse-invoice', {
+			const response = await fetch(`${apiBaseUrl}/api/parse-invoice`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
