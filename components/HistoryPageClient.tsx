@@ -75,22 +75,22 @@ export default function HistoryPageClient() {
 	}
 
 	return (
-		<div className='mx-auto max-w-4xl px-4 sm:px-6 py-8'>
-			<div className='flex items-center justify-between mb-6'>
+		<div className='mx-auto max-w-4xl px-4 sm:px-6 py-10'>
+			<div className='flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link
 						href='/'
-						className='inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+						className='icon-button'
 						aria-label='Back to editor'
 						title='Back to editor'
 					>
 						<ArrowLeft className='h-4 w-4' />
 					</Link>
 					<div>
-						<h1 className='text-xl font-semibold text-gray-900 dark:text-slate-100'>
+						<h1 className='text-2xl font-semibold text-slate-900 dark:text-slate-100 font-display'>
 							History
 						</h1>
-						<p className='text-xs text-gray-500 dark:text-slate-400'>
+						<p className='text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
 							Drafts and recent invoices
 						</p>
 					</div>
@@ -109,7 +109,7 @@ export default function HistoryPageClient() {
 					onDelete={handleDeleteInvoice}
 				/>
 			) : (
-				<div className='card p-4 text-xs text-gray-500 dark:text-slate-400'>
+				<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
 					Sign in to view your invoice history.
 				</div>
 			)}

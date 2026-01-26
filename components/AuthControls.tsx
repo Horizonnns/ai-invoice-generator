@@ -124,7 +124,7 @@ export default function AuthControls({
 				<>
 					<button
 						onClick={handleLogout}
-						className='group relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 bg-white/70 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+						className='icon-button'
 					>
 						<LogOut className='w-3.5 h-3.5' />
 					</button>
@@ -146,7 +146,7 @@ export default function AuthControls({
 					title='Sign in with Google'
 					aria-label='Sign in with Google'
 				>
-					<div className='flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 bg-white shadow-sm'>
+					<div className='flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white shadow-sm'>
 						<svg
 							aria-hidden='true'
 							viewBox='0 0 48 48'

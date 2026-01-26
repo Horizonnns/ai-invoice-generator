@@ -1,13 +1,19 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Space_Grotesk, Source_Serif_4 } from 'next/font/google'
 import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
 	subsets: ['latin'],
 	display: 'swap',
-	variable: '--font-inter'
+	variable: '--font-body'
+})
+
+const sourceSerif = Source_Serif_4({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-display'
 })
 
 export const metadata: Metadata = {
@@ -96,7 +102,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang='en'
-			className={inter.variable}
+			className={`${spaceGrotesk.variable} ${sourceSerif.variable}`}
 			suppressHydrationWarning
 		>
 			<head>

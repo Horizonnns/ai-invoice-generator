@@ -203,19 +203,19 @@ export default function HomeClient({ children }: HomeClientProps) {
 	return (
 		<div className='min-h-screen'>
 			{/* Header */}
-			<header className='sticky top-0 z-40 glass border-b border-gray-200/50 dark:border-slate-800/70'>
-				<div className='mx-auto px-4 sm:px-6'>
-					<div className='flex items-center justify-between h-14'>
+			<header className='sticky top-0 z-40 glass border-b border-slate-200/70 dark:border-slate-700/60'>
+				<div className='mx-auto max-w-6xl px-4 sm:px-6'>
+					<div className='flex items-center justify-between h-16'>
 						<div className='flex items-center gap-2.5'>
-							<div className='p-1.5 bg-linear-to-br from-indigo-500 to-purple-600 rounded-lg shadow-md shadow-indigo-500/25'>
+							<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25'>
 								<FileText className='w-5 h-5 text-white' />
 							</div>
 							<div>
-								<h1 className='text-lg font-bold text-gray-900 dark:text-slate-100'>
+								<h1 className='text-lg font-bold text-slate-900 dark:text-slate-100 font-display'>
 									AI Invoice Generator
 								</h1>
-								<p className='text-[11px] text-gray-500 dark:text-slate-400 -mt-0.5'>
-									Create professional invoices instantly
+								<p className='text-[11px] text-slate-500 dark:text-slate-400 -mt-0.5 tracking-wide uppercase'>
+									Ledger-grade invoicing
 								</p>
 							</div>
 						</div>
@@ -224,7 +224,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 							<ThemeToggle />
 							<Link
 								href='/history'
-								className='group relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 bg-white/70 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+								className='icon-button'
 								aria-label='History'
 								title='History'
 							>
@@ -241,14 +241,51 @@ export default function HomeClient({ children }: HomeClientProps) {
 			</header>
 
 			{/* Main Content - Balanced columns */}
-			<main className='mx-auto px-4 sm:px-6'>
+			<main className='mx-auto max-w-6xl px-4 sm:px-6'>
 				{children ? (
 					<section className='mb-6 max-w-3xl'>{children}</section>
 				) : null}
 
-				<div className='flex flex-col lg:flex-row gap-6'>
+				<section className='mt-6 mb-8 grid gap-4 rounded-2xl border border-slate-200/70 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/50'>
+					<div className='flex flex-col gap-2'>
+						<p className='text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400'>
+							Invoice workspace
+						</p>
+						<h2 className='text-2xl font-semibold text-slate-900 dark:text-white font-display'>
+							Create, review, and export with confidence.
+						</h2>
+					</div>
+					<div className='grid gap-3 text-xs text-slate-600 dark:text-slate-300 sm:grid-cols-3'>
+						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
+							<p className='font-semibold text-slate-900 dark:text-white'>
+								Structured details
+							</p>
+							<p className='mt-1 text-[11px]'>
+								Clean fields for clients, terms, and totals.
+							</p>
+						</div>
+						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
+							<p className='font-semibold text-slate-900 dark:text-white'>
+								Magic Fill ready
+							</p>
+							<p className='mt-1 text-[11px]'>
+								Drop in text or voice and polish the draft.
+							</p>
+						</div>
+						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
+							<p className='font-semibold text-slate-900 dark:text-white'>
+								PDF perfect
+							</p>
+							<p className='mt-1 text-[11px]'>
+								Export client-ready invoices with one click.
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<div className='flex flex-col lg:flex-row gap-8'>
 					{/* Left Column - Form */}
-					<div className='lg:w-1/2 lg:shrink-0'>
+					<div className='lg:w-[48%] lg:shrink-0'>
 						<InvoiceForm
 							data={invoiceData}
 							onChange={setInvoiceData}
@@ -259,7 +296,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 					</div>
 
 					{/* Right Column - Preview */}
-					<div className='w-full sticky top-20'>
+					<div className='w-full sticky top-24 self-start'>
 						{historyError ? (
 							<div className='mb-3 text-xs text-red-500'>{historyError}</div>
 						) : null}
@@ -275,15 +312,15 @@ export default function HomeClient({ children }: HomeClientProps) {
 			</main>
 
 			{/* Footer */}
-			<footer className='py-5 mt-6 border-t border-gray-200 bg-white/50 dark:border-slate-800/70 dark:bg-slate-900/50'>
-				<div className='mx-auto px-4 sm:px-6'>
+			<footer className='py-6 mt-6 border-t border-slate-200/70 bg-white/60 dark:border-slate-700/60 dark:bg-slate-900/40'>
+				<div className='mx-auto max-w-6xl px-4 sm:px-6'>
 					<div className='flex flex-col md:flex-row items-center justify-between gap-3'>
-						<div className='flex items-center gap-2 text-gray-500 dark:text-slate-400 text-xs'>
+						<div className='flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs'>
 							<FileText className='w-3.5 h-3.5' />
 							<span>AI Invoice Generator</span>
 						</div>
 
-						<p className='text-gray-400 dark:text-slate-500 text-xs'>
+						<p className='text-slate-400 dark:text-slate-500 text-xs'>
 							© {new Date().getFullYear()} All rights reserved
 						</p>
 					</div>

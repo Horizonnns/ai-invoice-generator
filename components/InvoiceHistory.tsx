@@ -24,7 +24,7 @@ export default function InvoiceHistory({
 }: InvoiceHistoryProps) {
 	if (invoices.length === 0) {
 		return (
-			<div className='card p-4 text-xs text-gray-500 dark:text-slate-400'>2
+			<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
 				No drafts or invoices yet.
 			</div>
 		)
@@ -32,7 +32,7 @@ export default function InvoiceHistory({
 
 	return (
 		<div className='card p-4 space-y-3'>
-			<div className='flex items-center gap-2 text-xs font-semibold text-gray-700 dark:text-slate-200'>
+			<div className='flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-[0.2em]'>
 				<Clock className='w-3.5 h-3.5' />
 				<span>History</span>
 			</div>
@@ -40,14 +40,17 @@ export default function InvoiceHistory({
 				{invoices.map(invoice => (
 					<div
 						key={invoice.id}
-						className='flex items-center justify-between gap-3 text-xs text-gray-600 dark:text-slate-300'
+						className='flex flex-col gap-3 rounded-xl border border-slate-200/70 bg-white/70 p-3 text-xs text-slate-600 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/40 sm:flex-row sm:items-center sm:justify-between'
 					>
 						<div className='space-y-0.5'>
-							<div className='font-medium text-gray-800 dark:text-slate-100'>
+							<div className='font-semibold text-slate-800 dark:text-slate-100 font-display'>
 								{invoice.data.invoiceNumber || 'Untitled invoice'}
 							</div>
-							<div className='text-[11px] text-gray-500 dark:text-slate-400'>
-								{invoice.status === 'draft' ? 'Draft' : 'Final'} ·{' '}
+							<div className='text-[11px] text-slate-500 dark:text-slate-400'>
+								<span className='inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:bg-slate-700/60 dark:text-slate-200'>
+									{invoice.status === 'draft' ? 'Draft' : 'Final'}
+								</span>
+								<span className='mx-2 text-slate-300 dark:text-slate-600'>•</span>
 								{formatDate(invoice.updatedAt)}
 							</div>
 						</div>
