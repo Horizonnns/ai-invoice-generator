@@ -9,17 +9,11 @@ import InvoiceItems from './InvoiceItems'
 interface InvoiceFormProps {
 	data: InvoiceData
 	onChange: (data: InvoiceData) => void
-	onSaveDraft?: () => void
-	canSaveDraft?: boolean
-	isSaving?: boolean
 }
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({
 	data,
-	onChange,
-	onSaveDraft,
-	canSaveDraft = false,
-	isSaving = false
+	onChange
 }) => {
 	const handleSenderChange = (field: keyof PartyInfo, value: string) => {
 		onChange({
@@ -39,22 +33,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
 		<div className='space-y-4'>
 			{/* Invoice Details */}
 			<div className='card p-4'>
-				<div className='flex items-center justify-between gap-2 mb-3'>
-					<div className='flex items-center gap-2'>
-						<FileText className='w-4 h-4 text-slate-700 dark:text-slate-200' />
-						<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>
-							Invoice Details
-						</h3>
-					</div>
-					{onSaveDraft ? (
-						<button
-							onClick={onSaveDraft}
-							className='btn-primary text-xs'
-							disabled={!canSaveDraft || isSaving}
-						>
-							{isSaving ? 'Saving...' : 'Save draft'}
-						</button>
-					) : null}
+				<div className='flex items-center gap-2 mb-3'>
+					<FileText className='w-4 h-4 text-slate-700 dark:text-slate-200' />
+					<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>
+						Invoice Details
+					</h3>
 				</div>
 				<div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
 					<div>

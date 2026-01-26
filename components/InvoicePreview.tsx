@@ -178,8 +178,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div
 							style={{
 								padding: '8px',
-								background:
-									'linear-gradient(135deg, #0b1b2b 0%, #1f3a5a 100%)',
+								background: 'linear-gradient(135deg, #0b1b2b 0%, #1f3a5a 100%)',
 								borderRadius: '10px'
 							}}
 						>
@@ -199,7 +198,11 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								INVOICE
 							</h1>
 							<p
-								style={{ fontSize: '12px', color: previewColors.muted, margin: 0 }}
+								style={{
+									fontSize: '12px',
+									color: previewColors.muted,
+									margin: 0
+								}}
 							>
 								{data.invoiceNumber}
 							</p>
@@ -218,25 +221,25 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div>
 							<p
 								style={{
-								fontSize: '10px',
-								fontWeight: '600',
-								color: previewColors.muted,
-								textTransform: 'uppercase',
-								letterSpacing: '0.05em',
-								marginBottom: '4px'
-							}}
+									fontSize: '10px',
+									fontWeight: '600',
+									color: previewColors.muted,
+									textTransform: 'uppercase',
+									letterSpacing: '0.05em',
+									marginBottom: '4px'
+								}}
 							>
 								From
 							</p>
 							<p
 								style={{
-								fontWeight: '600',
-								color: previewColors.ink,
-								fontSize: '14px',
-								margin: '0 0 2px 0',
-								wordBreak: 'break-word'
-							}}
-						>
+									fontWeight: '600',
+									color: previewColors.ink,
+									fontSize: '14px',
+									margin: '0 0 2px 0',
+									wordBreak: 'break-word'
+								}}
+							>
 								{data.sender.name || 'Your Business'}
 							</p>
 							<p
@@ -274,25 +277,25 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div>
 							<p
 								style={{
-								fontSize: '10px',
-								fontWeight: '600',
-								color: previewColors.muted,
-								textTransform: 'uppercase',
-								letterSpacing: '0.05em',
-								marginBottom: '4px'
-							}}
+									fontSize: '10px',
+									fontWeight: '600',
+									color: previewColors.muted,
+									textTransform: 'uppercase',
+									letterSpacing: '0.05em',
+									marginBottom: '4px'
+								}}
 							>
 								Bill To
 							</p>
 							<p
 								style={{
-								fontWeight: '600',
-								color: previewColors.ink,
-								fontSize: '14px',
-								margin: '0 0 2px 0',
-								wordBreak: 'break-word'
-							}}
-						>
+									fontWeight: '600',
+									color: previewColors.ink,
+									fontSize: '14px',
+									margin: '0 0 2px 0',
+									wordBreak: 'break-word'
+								}}
+							>
 								{data.recipient.name || 'Client Name'}
 							</p>
 							<p
@@ -344,46 +347,46 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div>
 							<p
 								style={{
-								fontSize: '10px',
-								fontWeight: '600',
-								color: previewColors.muted,
-								textTransform: 'uppercase',
-								margin: '0 0 2px 0'
-							}}
+									fontSize: '10px',
+									fontWeight: '600',
+									color: previewColors.muted,
+									textTransform: 'uppercase',
+									margin: '0 0 2px 0'
+								}}
 							>
 								Issue Date
 							</p>
 							<p
 								style={{
-								fontWeight: '500',
-								color: previewColors.ink,
-								fontSize: '14px',
-								margin: 0
-							}}
-						>
+									fontWeight: '500',
+									color: previewColors.ink,
+									fontSize: '14px',
+									margin: 0
+								}}
+							>
 								{data.issueDate ? formatDate(data.issueDate) : '-'}
 							</p>
 						</div>
 						<div>
 							<p
 								style={{
-								fontSize: '10px',
-								fontWeight: '600',
-								color: previewColors.muted,
-								textTransform: 'uppercase',
-								margin: '0 0 2px 0'
-							}}
+									fontSize: '10px',
+									fontWeight: '600',
+									color: previewColors.muted,
+									textTransform: 'uppercase',
+									margin: '0 0 2px 0'
+								}}
 							>
 								Due Date
 							</p>
 							<p
 								style={{
-								fontWeight: '500',
-								color: previewColors.ink,
-								fontSize: '14px',
-								margin: 0
-							}}
-						>
+									fontWeight: '500',
+									color: previewColors.ink,
+									fontSize: '14px',
+									margin: 0
+								}}
+							>
 								{data.dueDate ? formatDate(data.dueDate) : '-'}
 							</p>
 						</div>
@@ -458,8 +461,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									<tr
 										key={item.id}
 										style={{
-											backgroundColor:
-												index % 2 === 0 ? '#f9fafb' : '#ffffff'
+											backgroundColor: index % 2 === 0 ? '#f9fafb' : '#ffffff'
 										}}
 									>
 										<td
@@ -509,11 +511,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					<div
 						style={{
 							display: 'flex',
-							justifyContent: 'flex-end',
+							justifyContent: 'space-between',
+							alignItems: 'flex-start',
+							gap: '16px',
 							marginBottom: '16px'
 						}}
 					>
-						<div style={{ width: '200px' }}>
+						<div style={{ flex: 1 }}>
 							<div
 								style={{
 									display: 'flex',
@@ -546,25 +550,24 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									</span>
 								</div>
 							)}
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'space-between',
-									alignItems: 'center',
-									padding: '10px 14px',
-									background: `linear-gradient(90deg, ${previewColors.ink} 0%, ${previewColors.accentDark} 100%)`,
-									borderRadius: '10px',
-									marginTop: '8px',
-									color: '#ffffff'
-								}}
-							>
-								<span style={{ fontWeight: '600', fontSize: '14px' }}>
-									Total
-								</span>
-								<span style={{ fontWeight: 'bold', fontSize: '14px' }}>
-									{formatCurrency(total)}
-								</span>
-							</div>
+						</div>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+								alignSelf: 'flex-end',
+								minWidth: '200px',
+								padding: '6px 12px',
+								borderRadius: '10px',
+								color: '#ffffff',
+								background: `linear-gradient(90deg, ${previewColors.ink} 0%, ${previewColors.accentDark} 100%)`
+							}}
+						>
+							<span style={{ fontWeight: '600', fontSize: '14px' }}>Total</span>
+							<span style={{ fontWeight: 'bold', fontSize: '14px' }}>
+								{formatCurrency(total)}
+							</span>
 						</div>
 					</div>
 
@@ -611,7 +614,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							textAlign: 'center'
 						}}
 					>
-						<p style={{ fontSize: '12px', color: previewColors.muted, margin: 0 }}>
+						<p
+							style={{
+								fontSize: '12px',
+								color: previewColors.muted,
+								margin: 0
+							}}
+						>
 							Thank you for your business!
 						</p>
 					</div>

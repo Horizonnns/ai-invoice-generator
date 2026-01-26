@@ -14,7 +14,12 @@ import type {
 } from '@/types/invoice'
 import {
 	calculateItemAmount,
+	calculateSubtotal,
+	calculateTax,
+	calculateTotal,
 	createEmptyItem,
+	formatCurrency,
+	formatDate,
 	generateInvoiceNumber,
 	getDefaultDueDate,
 	getTodayDate
@@ -57,6 +62,9 @@ export default function HomeClient({ children }: HomeClientProps) {
 	const [user, setUser] = useState<AuthUser | null>(null)
 	const [historyError, setHistoryError] = useState<string | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
+	const subtotal = calculateSubtotal(invoiceData.items)
+	const taxAmount = calculateTax(subtotal, invoiceData.tax || 0)
+	const total = calculateTotal(subtotal, taxAmount)
 
 	// Set initial invoice number on client side to prevent hydration mismatch
 	useEffect(() => {
@@ -285,28 +293,101 @@ export default function HomeClient({ children }: HomeClientProps) {
 
 				<div className='flex flex-col lg:flex-row gap-8'>
 					{/* Left Column - Form */}
-					<div className='lg:w-[48%] lg:shrink-0'>
-						<InvoiceForm
-							data={invoiceData}
-							onChange={setInvoiceData}
-							onSaveDraft={handleSaveDraft}
-							canSaveDraft={Boolean(user)}
-							isSaving={isSaving}
-						/>
+					<div className='lg:w-[55%] lg:shrink-0'>
+						<InvoiceForm data={invoiceData} onChange={setInvoiceData} />
 					</div>
 
 					{/* Right Column - Preview */}
-					<div className='w-full sticky top-24 self-start'>
+					<div className='w-full lg:w-[45%] self-start space-y-4'>
 						{historyError ? (
 							<div className='mb-3 text-xs text-red-500'>{historyError}</div>
 						) : null}
 
-						<InvoicePreview
-							ref={previewRef}
-							data={invoiceData}
-							isDownloading={isDownloading}
-							onDownload={handleDownload}
-						/>
+						<div className='card p-4'>
+							<div className='flex items-center justify-between gap-2'>
+								<div>
+									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400'>
+										Invoice summary
+									</p>
+									<h3 className='text-lg font-semibold text-slate-900 dark:text-white font-display'>
+										{formatCurrency(total)}
+									</h3>
+								</div>
+								<button
+									onClick={handleSaveDraft}
+									className='btn-primary text-xs'
+									disabled={!user || isSaving}
+								>
+									{isSaving ? 'Saving...' : 'Save draft'}
+								</button>
+							</div>
+							<div className='mt-3 grid grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-300'>
+								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
+									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
+										Client
+									</p>
+									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
+										{invoiceData.recipient.name || 'Client name'}
+									</p>
+								</div>
+								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
+									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
+										Items
+									</p>
+									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
+										{invoiceData.items.length}
+									</p>
+								</div>
+								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
+									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
+										Issue date
+									</p>
+									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
+										{invoiceData.issueDate
+											? formatDate(invoiceData.issueDate)
+											: '-'}
+									</p>
+								</div>
+								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
+									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
+										Due date
+									</p>
+									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
+										{invoiceData.dueDate
+											? formatDate(invoiceData.dueDate)
+											: '-'}
+									</p>
+								</div>
+							</div>
+							<div className='mt-3 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300'>
+								<span>Subtotal</span>
+								<span className='font-semibold text-slate-800 dark:text-slate-100'>
+									{formatCurrency(subtotal)}
+								</span>
+							</div>
+							{(invoiceData.tax || 0) > 0 ? (
+								<div className='mt-2 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300'>
+									<span>Tax ({invoiceData.tax}%)</span>
+									<span className='font-semibold text-slate-800 dark:text-slate-100'>
+										{formatCurrency(taxAmount)}
+									</span>
+								</div>
+							) : null}
+							{!user ? (
+								<p className='mt-3 text-[11px] text-slate-500 dark:text-slate-400'>
+									Sign in to save drafts to history.
+								</p>
+							) : null}
+						</div>
+
+						<div className='sticky top-24'>
+							<InvoicePreview
+								ref={previewRef}
+								data={invoiceData}
+								isDownloading={isDownloading}
+								onDownload={handleDownload}
+							/>
+						</div>
 					</div>
 				</div>
 			</main>
