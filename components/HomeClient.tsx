@@ -2,7 +2,6 @@
 
 import AuthControls from '@/components/AuthControls'
 import InvoiceForm from '@/components/InvoiceForm'
-import InvoiceHistory from '@/components/InvoiceHistory'
 import InvoicePreview, {
 	type InvoicePreviewRef
 } from '@/components/InvoicePreview'
@@ -11,7 +10,6 @@ import ThemeToggle from '@/components/ThemeToggle'
 import type {
 	AuthUser,
 	InvoiceData,
-	InvoiceRecord,
 	ParsedInvoiceResponse
 } from '@/types/invoice'
 import {
@@ -21,7 +19,8 @@ import {
 	getDefaultDueDate,
 	getTodayDate
 } from '@/utils/helpers'
-import { FileText } from 'lucide-react'
+import { Clock, FileText } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 const defaultInvoiceData: InvoiceData = {
@@ -56,16 +55,19 @@ export default function HomeClient({ children }: HomeClientProps) {
 	const [isDownloading, setIsDownloading] = useState(false)
 	const previewRef = useRef<InvoicePreviewRef>(null)
 	const [user, setUser] = useState<AuthUser | null>(null)
-	const [history, setHistory] = useState<InvoiceRecord[]>([])
 	const [historyError, setHistoryError] = useState<string | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
 
 	// Set initial invoice number on client side to prevent hydration mismatch
 	useEffect(() => {
-		setInvoiceData(prev => ({
-			...prev,
-			invoiceNumber: generateInvoiceNumber()
-		}))
+		setInvoiceData(prev =>
+			prev.invoiceNumber
+				? prev
+				: {
+						...prev,
+						invoiceNumber: generateInvoiceNumber()
+					}
+		)
 	}, [])
 
 	useEffect(() => {
@@ -85,11 +87,19 @@ export default function HomeClient({ children }: HomeClientProps) {
 	}, [apiBaseUrl])
 
 	useEffect(() => {
-		if (!user) {
-			setHistory([])
-			return
+		const stored = window.localStorage.getItem('invoiceDraft')
+		if (!stored) return
+		try {
+			const parsed = JSON.parse(stored) as InvoiceData
+			setInvoiceData(parsed)
+		} catch {
+			// Ignore invalid cached draft.
+		} finally {
+			window.localStorage.removeItem('invoiceDraft')
 		}
+	}, [])
 
+	useEffect(() => {
 		const loadHistory = async () => {
 			setHistoryError(null)
 			try {
@@ -100,7 +110,6 @@ export default function HomeClient({ children }: HomeClientProps) {
 					throw new Error('Failed to load history')
 				}
 				const data = await res.json()
-				setHistory(data.invoices ?? [])
 			} catch (error) {
 				setHistoryError(
 					error instanceof Error ? error.message : 'Failed to load history'
@@ -182,35 +191,12 @@ export default function HomeClient({ children }: HomeClientProps) {
 				throw new Error('Failed to save draft')
 			}
 			const data = await res.json()
-			setHistory(prev => [data.invoice, ...prev])
 		} catch (error) {
 			setHistoryError(
 				error instanceof Error ? error.message : 'Failed to save draft'
 			)
 		} finally {
 			setIsSaving(false)
-		}
-	}
-
-	const handleLoadInvoice = (invoice: InvoiceRecord) => {
-		setInvoiceData(invoice.data)
-	}
-
-	const handleDeleteInvoice = async (id: string) => {
-		setHistoryError(null)
-		try {
-			const res = await fetch(`${apiBaseUrl}/api/invoices/${id}`, {
-				method: 'DELETE',
-				credentials: 'include'
-			})
-			if (!res.ok) {
-				throw new Error('Failed to delete invoice')
-			}
-			setHistory(prev => prev.filter(item => item.id !== id))
-		} catch (error) {
-			setHistoryError(
-				error instanceof Error ? error.message : 'Failed to delete invoice'
-			)
 		}
 	}
 
@@ -236,6 +222,14 @@ export default function HomeClient({ children }: HomeClientProps) {
 						<div className='flex items-center gap-2.5'>
 							<MagicFill onFill={handleMagicFill} />
 							<ThemeToggle />
+							<Link
+								href='/history'
+								className='group relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 bg-white/70 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+								aria-label='History'
+								title='History'
+							>
+								<Clock className='relative h-4 w-4' />
+							</Link>
 							<AuthControls
 								user={user}
 								onAuth={setUser}
@@ -269,15 +263,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 						{historyError ? (
 							<div className='mb-3 text-xs text-red-500'>{historyError}</div>
 						) : null}
-						{user ? (
-							<div className='mb-4'>
-								<InvoiceHistory
-									invoices={history}
-									onLoad={handleLoadInvoice}
-									onDelete={handleDeleteInvoice}
-								/>
-							</div>
-						) : null}
+
 						<InvoicePreview
 							ref={previewRef}
 							data={invoiceData}

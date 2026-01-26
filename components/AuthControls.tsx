@@ -134,10 +134,10 @@ export default function AuthControls({
 							<img
 								src={user.picture}
 								alt={user.name ?? user.email}
-								className='w-6 h-6 rounded-full'
+								className='w-8 h-8 rounded-full'
+								title={user.name ?? user.email}
 							/>
 						) : null}
-						<span>{user.name ?? user.email}</span>
 					</div>
 				</>
 			) : (

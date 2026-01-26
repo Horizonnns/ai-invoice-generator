@@ -24,7 +24,7 @@ export default function InvoiceHistory({
 }: InvoiceHistoryProps) {
 	if (invoices.length === 0) {
 		return (
-			<div className='card p-4 text-xs text-gray-500 dark:text-slate-400'>
+			<div className='card p-4 text-xs text-gray-500 dark:text-slate-400'>2
 				No drafts or invoices yet.
 			</div>
 		)
