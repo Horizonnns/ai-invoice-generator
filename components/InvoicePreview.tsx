@@ -72,10 +72,8 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 		const handleDownloadPDF = async () => {
 			try {
-				// @ts-ignore
 				const { default: PDFDocument } =
 					await import('pdfkit/js/pdfkit.standalone.js')
-				// @ts-ignore
 				const { default: blobStream } = await import('blob-stream')
 
 				// Fetch Fonts from the local public directory
