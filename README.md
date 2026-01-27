@@ -162,7 +162,7 @@ The app uses Tailwind CSS 4 with the Vite plugin. Custom styles are defined in
 ### Vite Proxy
 
 API requests to `/api/*` are proxied to the backend server (default:
-`http://localhost:3001`).
+`http://localhost:3000`).
 
 ## 📝 License
 

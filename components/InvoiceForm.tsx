@@ -11,7 +11,10 @@ interface InvoiceFormProps {
 	onChange: (data: InvoiceData) => void
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({
+	data,
+	onChange
+}) => {
 	const handleSenderChange = (field: keyof PartyInfo, value: string) => {
 		onChange({
 			...data,
@@ -31,8 +34,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 			{/* Invoice Details */}
 			<div className='card p-4'>
 				<div className='flex items-center gap-2 mb-3'>
-					<FileText className='w-4 h-4 text-indigo-600 dark:text-indigo-300' />
-					<h3 className='font-semibold text-gray-800 dark:text-slate-100 text-sm'>
+					<FileText className='w-4 h-4 text-slate-700 dark:text-slate-200' />
+					<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>
 						Invoice Details
 					</h3>
 				</div>
@@ -72,12 +75,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 				{/* From */}
 				<div className='card p-4'>
 					<div className='flex items-center gap-2 mb-3'>
-						<div className='p-1.5 bg-indigo-100 dark:bg-indigo-500/15 rounded-md'>
-							<User className='w-4 h-4 text-indigo-600 dark:text-indigo-300' />
+						<div className='p-1.5 bg-slate-100 dark:bg-slate-500/15 rounded-md'>
+							<User className='w-4 h-4 text-slate-700 dark:text-slate-200' />
 						</div>
 						<div>
-							<h3 className='font-semibold text-gray-800 dark:text-slate-100 text-sm'>From</h3>
-							<p className='text-[11px] text-gray-500 dark:text-slate-400'>Your business info</p>
+							<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>From</h3>
+							<p className='text-[11px] text-slate-500 dark:text-slate-400'>Your business info</p>
 						</div>
 					</div>
 					<div className='space-y-2.5'>
@@ -135,12 +138,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 				{/* To */}
 				<div className='card p-4'>
 					<div className='flex items-center gap-2 mb-3'>
-						<div className='p-1.5 bg-emerald-100 dark:bg-emerald-500/15 rounded-md'>
-							<Building2 className='w-4 h-4 text-emerald-600 dark:text-emerald-300' />
+						<div className='p-1.5 bg-amber-100/70 dark:bg-amber-500/20 rounded-md'>
+							<Building2 className='w-4 h-4 text-amber-700 dark:text-amber-200' />
 						</div>
 						<div>
-							<h3 className='font-semibold text-gray-800 dark:text-slate-100 text-sm'>Bill To</h3>
-							<p className='text-[11px] text-gray-500 dark:text-slate-400'>Client info</p>
+							<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>Bill To</h3>
+							<p className='text-[11px] text-slate-500 dark:text-slate-400'>Client info</p>
 						</div>
 					</div>
 					<div className='space-y-2.5'>
@@ -208,8 +211,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 			<div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
 				<div className='card p-4'>
 					<div className='flex items-center gap-2 mb-2'>
-						<MessageSquare className='w-4 h-4 text-indigo-600 dark:text-indigo-300' />
-						<h3 className='font-semibold text-gray-800 dark:text-slate-100 text-sm'>Notes</h3>
+						<MessageSquare className='w-4 h-4 text-slate-700 dark:text-slate-200' />
+						<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>Notes</h3>
 					</div>
 					<textarea
 						value={data.notes || ''}
@@ -222,7 +225,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onChange }) => {
 
 				<div className='card p-4'>
 					<div className='flex items-center gap-2 mb-2'>
-						<h3 className='font-semibold text-gray-800 dark:text-slate-100 text-sm'>
+						<h3 className='font-semibold text-slate-800 dark:text-slate-100 text-sm font-display'>
 							Tax Rate (%)
 						</h3>
 					</div>

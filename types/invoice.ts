@@ -36,3 +36,18 @@ export interface ParsedInvoiceResponse {
 	dueDate?: string
 	notes?: string
 }
+
+export interface InvoiceRecord {
+	id: string
+	status: 'draft' | 'final'
+	data: InvoiceData
+	createdAt: number
+	updatedAt: number
+}
+
+export interface AuthUser {
+	id: string
+	email: string
+	name?: string
+	picture?: string
+}

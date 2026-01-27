@@ -23,6 +23,20 @@ export interface InvoicePreviewRef {
 	downloadPDF: () => Promise<void>
 }
 
+const previewColors = {
+	ink: '#0b1b2b',
+	inkSoft: '#1f2937',
+	muted: '#6b7280',
+	line: '#e2e8f0',
+	surface: '#f8f4ee',
+	accent: '#b08968',
+	accentDark: '#8f6b4f',
+	accentSoft: '#f3ece4',
+	noteBg: '#fff3e2',
+	noteBorder: '#f2d4b0',
+	noteText: '#a16207'
+}
+
 // Helper to convert oklch colors to rgb
 const convertOklchToRgb = (element: HTMLElement) => {
 	const computed = window.getComputedStyle(element)
@@ -97,7 +111,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 		}))
 
 		return (
-			<div className='bg-white dark:bg-slate-900 rounded-xl shadow-lg dark:shadow-black/40 overflow-hidden border border-gray-100 dark:border-slate-800 relative'>
+			<div className='bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-black/40 overflow-hidden border border-slate-200/70 dark:border-slate-800/80 relative'>
 				{/* Download PDF Button - Top Right Corner */}
 				<button
 					onClick={onDownload}
@@ -107,8 +121,9 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						top: '12px',
 						right: '12px',
 						padding: '8px 14px',
-						background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-						borderRadius: '8px',
+						background:
+							'linear-gradient(135deg, #0b1b2b 0%, #1e3550 55%, #b08968 100%)',
+						borderRadius: '10px',
 						color: '#ffffff',
 						fontWeight: '500',
 						fontSize: '13px',
@@ -117,7 +132,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						display: 'flex',
 						alignItems: 'center',
 						gap: '6px',
-						boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
+						boxShadow: '0 10px 20px rgba(11, 27, 43, 0.25)',
 						zIndex: 10,
 						opacity: isDownloading ? 0.6 : 1
 					}}
@@ -146,8 +161,9 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					style={{
 						padding: '24px',
 						backgroundColor: '#ffffff',
-						color: '#1e293b',
-						fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
+						color: previewColors.inkSoft,
+						fontFamily:
+							'Space Grotesk, -apple-system, BlinkMacSystemFont, sans-serif'
 					}}
 				>
 					{/* Header */}
@@ -162,8 +178,8 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div
 							style={{
 								padding: '8px',
-								background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-								borderRadius: '8px'
+								background: 'linear-gradient(135deg, #0b1b2b 0%, #1f3a5a 100%)',
+								borderRadius: '10px'
 							}}
 						>
 							<FileText
@@ -175,13 +191,19 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '20px',
 									fontWeight: 'bold',
-									color: '#111827',
+									color: previewColors.ink,
 									margin: 0
 								}}
 							>
 								INVOICE
 							</h1>
-							<p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+							<p
+								style={{
+									fontSize: '12px',
+									color: previewColors.muted,
+									margin: 0
+								}}
+							>
 								{data.invoiceNumber}
 							</p>
 						</div>
@@ -201,7 +223,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '10px',
 									fontWeight: '600',
-									color: '#9ca3af',
+									color: previewColors.muted,
 									textTransform: 'uppercase',
 									letterSpacing: '0.05em',
 									marginBottom: '4px'
@@ -212,7 +234,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontWeight: '600',
-									color: '#111827',
+									color: previewColors.ink,
 									fontSize: '14px',
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -223,7 +245,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontSize: '12px',
-									color: '#6b7280',
+									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -233,7 +255,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontSize: '12px',
-									color: '#6b7280',
+									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -241,7 +263,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								{data.sender.address}
 							</p>
 							{data.sender.phone && (
-								<p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+								<p
+									style={{
+										fontSize: '12px',
+										color: previewColors.muted,
+										margin: 0
+									}}
+								>
 									{data.sender.phone}
 								</p>
 							)}
@@ -251,7 +279,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '10px',
 									fontWeight: '600',
-									color: '#9ca3af',
+									color: previewColors.muted,
 									textTransform: 'uppercase',
 									letterSpacing: '0.05em',
 									marginBottom: '4px'
@@ -262,7 +290,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontWeight: '600',
-									color: '#111827',
+									color: previewColors.ink,
 									fontSize: '14px',
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -273,7 +301,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontSize: '12px',
-									color: '#6b7280',
+									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -283,7 +311,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontSize: '12px',
-									color: '#6b7280',
+									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -291,7 +319,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								{data.recipient.address}
 							</p>
 							{data.recipient.phone && (
-								<p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+								<p
+									style={{
+										fontSize: '12px',
+										color: previewColors.muted,
+										margin: 0
+									}}
+								>
 									{data.recipient.phone}
 								</p>
 							)}
@@ -305,8 +339,9 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							gap: '32px',
 							marginBottom: '20px',
 							padding: '12px 16px',
-							backgroundColor: '#f9fafb',
-							borderRadius: '8px'
+							backgroundColor: previewColors.surface,
+							borderRadius: '10px',
+							border: `1px solid ${previewColors.line}`
 						}}
 					>
 						<div>
@@ -314,7 +349,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '10px',
 									fontWeight: '600',
-									color: '#9ca3af',
+									color: previewColors.muted,
 									textTransform: 'uppercase',
 									margin: '0 0 2px 0'
 								}}
@@ -324,7 +359,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontWeight: '500',
-									color: '#111827',
+									color: previewColors.ink,
 									fontSize: '14px',
 									margin: 0
 								}}
@@ -337,7 +372,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '10px',
 									fontWeight: '600',
-									color: '#9ca3af',
+									color: previewColors.muted,
 									textTransform: 'uppercase',
 									margin: '0 0 2px 0'
 								}}
@@ -347,7 +382,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontWeight: '500',
-									color: '#111827',
+									color: previewColors.ink,
 									fontSize: '14px',
 									margin: 0
 								}}
@@ -374,7 +409,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											padding: '8px 0',
 											fontSize: '10px',
 											fontWeight: '600',
-											color: '#6b7280',
+											color: previewColors.muted,
 											textTransform: 'uppercase'
 										}}
 									>
@@ -387,7 +422,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											width: '60px',
 											fontSize: '10px',
 											fontWeight: '600',
-											color: '#6b7280',
+											color: previewColors.muted,
 											textTransform: 'uppercase'
 										}}
 									>
@@ -400,7 +435,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											width: '80px',
 											fontSize: '10px',
 											fontWeight: '600',
-											color: '#6b7280',
+											color: previewColors.muted,
 											textTransform: 'uppercase'
 										}}
 									>
@@ -413,7 +448,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											width: '90px',
 											fontSize: '10px',
 											fontWeight: '600',
-											color: '#6b7280',
+											color: previewColors.muted,
 											textTransform: 'uppercase'
 										}}
 									>
@@ -432,7 +467,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 										<td
 											style={{
 												padding: '10px 8px 10px 0',
-												color: '#111827',
+												color: previewColors.ink,
 												wordBreak: 'break-word'
 											}}
 										>
@@ -442,7 +477,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											style={{
 												padding: '10px 0',
 												textAlign: 'center',
-												color: '#6b7280'
+												color: previewColors.muted
 											}}
 										>
 											{item.quantity ?? 0}
@@ -451,7 +486,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 											style={{
 												padding: '10px 0',
 												textAlign: 'right',
-												color: '#6b7280'
+												color: previewColors.muted
 											}}
 										>
 											{formatCurrency(item.rate ?? 0)}
@@ -461,7 +496,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 												padding: '10px 0',
 												textAlign: 'right',
 												fontWeight: '500',
-												color: '#111827'
+												color: previewColors.ink
 											}}
 										>
 											{formatCurrency(item.amount)}
@@ -476,11 +511,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					<div
 						style={{
 							display: 'flex',
-							justifyContent: 'flex-end',
+							justifyContent: 'space-between',
+							alignItems: 'flex-start',
+							gap: '16px',
 							marginBottom: '16px'
 						}}
 					>
-						<div style={{ width: '200px' }}>
+						<div style={{ flex: 1 }}>
 							<div
 								style={{
 									display: 'flex',
@@ -490,8 +527,8 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									fontSize: '12px'
 								}}
 							>
-								<span style={{ color: '#6b7280' }}>Subtotal</span>
-								<span style={{ fontWeight: '500', color: '#111827' }}>
+								<span style={{ color: previewColors.muted }}>Subtotal</span>
+								<span style={{ fontWeight: '500', color: previewColors.ink }}>
 									{formatCurrency(subtotal)}
 								</span>
 							</div>
@@ -505,32 +542,32 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 										fontSize: '12px'
 									}}
 								>
-									<span style={{ color: '#6b7280' }}>Tax ({data.tax}%)</span>
-									<span style={{ fontWeight: '500', color: '#111827' }}>
+									<span style={{ color: previewColors.muted }}>
+										Tax ({data.tax}%)
+									</span>
+									<span style={{ fontWeight: '500', color: previewColors.ink }}>
 										{formatCurrency(taxAmount)}
 									</span>
 								</div>
 							)}
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'space-between',
-									alignItems: 'center',
-									padding: '10px 14px',
-									background:
-										'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
-									borderRadius: '8px',
-									marginTop: '8px',
-									color: '#ffffff'
-								}}
-							>
-								<span style={{ fontWeight: '600', fontSize: '14px' }}>
-									Total
-								</span>
-								<span style={{ fontWeight: 'bold', fontSize: '14px' }}>
-									{formatCurrency(total)}
-								</span>
-							</div>
+						</div>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+								alignSelf: 'flex-end',
+								minWidth: '200px',
+								padding: '6px 12px',
+								borderRadius: '10px',
+								color: '#ffffff',
+								background: `linear-gradient(90deg, ${previewColors.ink} 0%, ${previewColors.accentDark} 100%)`
+							}}
+						>
+							<span style={{ fontWeight: '600', fontSize: '14px' }}>Total</span>
+							<span style={{ fontWeight: 'bold', fontSize: '14px' }}>
+								{formatCurrency(total)}
+							</span>
 						</div>
 					</div>
 
@@ -539,9 +576,9 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						<div
 							style={{
 								padding: '12px 16px',
-								backgroundColor: '#fef3c7',
-								border: '1px solid #fde68a',
-								borderRadius: '8px',
+								backgroundColor: previewColors.noteBg,
+								border: `1px solid ${previewColors.noteBorder}`,
+								borderRadius: '10px',
 								marginBottom: '16px'
 							}}
 						>
@@ -549,7 +586,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontSize: '10px',
 									fontWeight: '600',
-									color: '#b45309',
+									color: previewColors.noteText,
 									textTransform: 'uppercase',
 									margin: '0 0 4px 0'
 								}}
@@ -559,7 +596,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							<p
 								style={{
 									fontSize: '12px',
-									color: '#374151',
+									color: previewColors.inkSoft,
 									margin: 0,
 									wordBreak: 'break-word'
 								}}
@@ -577,7 +614,13 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							textAlign: 'center'
 						}}
 					>
-						<p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
+						<p
+							style={{
+								fontSize: '12px',
+								color: previewColors.muted,
+								margin: 0
+							}}
+						>
 							Thank you for your business!
 						</p>
 					</div>
