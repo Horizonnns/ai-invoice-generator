@@ -94,6 +94,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							'https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-700-normal.ttf'
 						)
 					])
+
 					const [regBuf, boldBuf] = await Promise.all([
 						fReg.arrayBuffer(),
 						fBold.arrayBuffer()
