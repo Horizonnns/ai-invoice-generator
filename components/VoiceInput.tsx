@@ -1,6 +1,6 @@
 'use client'
 
-import { Mic } from 'lucide-react'
+import { Loader2, Mic } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 interface VoiceInputProps {
@@ -10,35 +10,43 @@ interface VoiceInputProps {
 
 const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 	const [isListening, setIsListening] = useState(false)
+	const [isProcessing, setIsProcessing] = useState(false)
 	const [audioLevel, setAudioLevel] = useState(0)
-	const recognitionRef = useRef<SpeechRecognition | null>(null)
+
+	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+	const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+	const audioChunksRef = useRef<Blob[]>([])
 	const audioContextRef = useRef<AudioContext | null>(null)
 	const analyserRef = useRef<AnalyserNode | null>(null)
 	const animationFrameRef = useRef<number | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
-	const transcriptRef = useRef<string>('')
 
 	const stopListening = useCallback(() => {
-		if (recognitionRef.current) recognitionRef.current.stop()
+		if (
+			mediaRecorderRef.current &&
+			mediaRecorderRef.current.state !== 'inactive'
+		) {
+			mediaRecorderRef.current.stop()
+		}
+
 		if (streamRef.current) {
 			streamRef.current.getTracks().forEach(track => track.stop())
 			streamRef.current = null
 		}
+
 		if (audioContextRef.current) {
 			audioContextRef.current.close()
 			audioContextRef.current = null
 		}
+
 		if (animationFrameRef.current) {
 			cancelAnimationFrame(animationFrameRef.current)
 			animationFrameRef.current = null
 		}
-		if (transcriptRef.current) {
-			onTranscript(transcriptRef.current)
-			transcriptRef.current = ''
-		}
+
 		setIsListening(false)
 		setAudioLevel(0)
-	}, [onTranscript])
+	}, [])
 
 	const visualize = useCallback(() => {
 		if (!analyserRef.current) return
@@ -50,11 +58,51 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 	}, [])
 
 	const startListening = useCallback(async () => {
-		if (!recognitionRef.current || disabled) return
+		if (disabled || isProcessing) return
 		try {
-			recognitionRef.current.start()
 			const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 			streamRef.current = stream
+
+			// Set up MediaRecorder
+			const mediaRecorder = new MediaRecorder(stream, {
+				mimeType: 'audio/webm'
+			})
+			mediaRecorderRef.current = mediaRecorder
+			audioChunksRef.current = []
+
+			mediaRecorder.ondataavailable = event => {
+				if (event.data.size > 0) {
+					audioChunksRef.current.push(event.data)
+				}
+			}
+
+			mediaRecorder.onstop = async () => {
+				const audioBlob = new Blob(audioChunksRef.current, {
+					type: 'audio/webm'
+				})
+				setIsProcessing(true)
+
+				try {
+					const response = await fetch(`${apiBaseUrl}/api/transcribe`, {
+						method: 'POST',
+						body: audioBlob,
+						headers: { 'Content-Type': 'audio/webm' }
+					})
+
+					if (!response.ok) throw new Error('Transcription failed')
+
+					const data = await response.json()
+					if (data.text) {
+						onTranscript(data.text)
+					}
+				} catch (error) {
+					console.error('Transcription error:', error)
+				} finally {
+					setIsProcessing(false)
+				}
+			}
+
+			// Set up Visualizer
 			const audioContext = new AudioContext()
 			const analyser = audioContext.createAnalyser()
 			const microphone = audioContext.createMediaStreamSource(stream)
@@ -62,50 +110,41 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 			microphone.connect(analyser)
 			audioContextRef.current = audioContext
 			analyserRef.current = analyser
+
 			visualize()
+			mediaRecorder.start()
 			setIsListening(true)
 		} catch (error) {
 			console.error('Error accessing microphone:', error)
 		}
-	}, [disabled, visualize])
+	}, [disabled, isProcessing, visualize, apiBaseUrl, onTranscript])
 
 	useEffect(() => {
-		const API = window.SpeechRecognition || window.webkitSpeechRecognition
-		if (API) {
-			const recognition = new API()
-			recognition.continuous = true
-			recognition.interimResults = true
-			recognition.lang = 'en-US'
-			recognition.onresult = event => {
-				const last = event.results[event.results.length - 1]
-				if (last.isFinal) {
-					transcriptRef.current +=
-						(transcriptRef.current ? ' ' : '') + last[0].transcript
-					onTranscript(transcriptRef.current)
-				}
-			}
-			recognition.onerror = () => stopListening()
-			recognitionRef.current = recognition
-		}
 		return () => stopListening()
-	}, [onTranscript, stopListening])
+	}, [stopListening])
 
 	return (
 		<div className='flex items-center gap-3'>
 			<button
 				type='button'
 				onClick={() => (isListening ? stopListening() : startListening())}
-				disabled={disabled}
+				disabled={disabled || isProcessing}
 				className={`
 					flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-xs font-semibold
 					${
 						isListening
-							? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
+							? 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400'
 							: 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800'
 					}
+					disabled:opacity-50
 				`}
 			>
-				{isListening ? (
+				{isProcessing ? (
+					<div className='flex items-center gap-2'>
+						<Loader2 className='w-3.5 h-3.5 animate-spin' />
+						<span>Processing...</span>
+					</div>
+				) : isListening ? (
 					<div className='flex items-center gap-1.5'>
 						<div className='flex items-center gap-0.5 h-3 w-4'>
 							{[...Array(3)].map((_, i) => (
@@ -118,7 +157,7 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 								/>
 							))}
 						</div>
-						<span>Listening...</span>
+						<span>Stop Recording</span>
 					</div>
 				) : (
 					<>

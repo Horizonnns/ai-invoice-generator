@@ -361,6 +361,40 @@ Rules:
 	}
 })
 
+// Audio Transcription endpoint
+// We use express.raw to handle the binary audio data sent from the client
+app.post(
+	'/api/transcribe',
+	express.raw({ type: 'audio/*', limit: '10mb' }),
+	async (req, res) => {
+		try {
+			if (!req.body || req.body.length === 0) {
+				return res.status(400).json({ error: 'No audio data provided' })
+			}
+
+			if (!process.env.OPENAI_API_KEY) {
+				return res.status(500).json({ error: 'OpenAI API key not configured' })
+			}
+
+			// Convert Buffer to File object for OpenAI SDK
+			// Node 20+ supports the File and Blob globals
+			const audioFile = new File([req.body], 'audio.webm', {
+				type: 'audio/webm'
+			})
+
+			const transcription = await openai.audio.transcriptions.create({
+				file: audioFile,
+				model: 'whisper-1'
+			})
+
+			res.json({ text: transcription.text })
+		} catch (error) {
+			console.error('Transcription error:', error)
+			res.status(500).json({ error: 'Failed to transcribe audio' })
+		}
+	}
+)
+
 // Health check
 app.get('/api/health', (req, res) => {
 	res.json({ status: 'ok' })
