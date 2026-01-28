@@ -62,6 +62,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 	const [user, setUser] = useState<AuthUser | null>(null)
 	const [historyError, setHistoryError] = useState<string | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
+	const [showSuccess, setShowSuccess] = useState(false)
 	const subtotal = calculateSubtotal(invoiceData.items)
 	const taxAmount = calculateTax(subtotal, invoiceData.tax || 0)
 	const total = calculateTotal(subtotal, taxAmount)
@@ -199,6 +200,8 @@ export default function HomeClient({ children }: HomeClientProps) {
 				throw new Error('Failed to save draft')
 			}
 			const data = await res.json()
+			setShowSuccess(true)
+			setTimeout(() => setShowSuccess(false), 3000)
 		} catch (error) {
 			setHistoryError(
 				error instanceof Error ? error.message : 'Failed to save draft'
@@ -210,6 +213,23 @@ export default function HomeClient({ children }: HomeClientProps) {
 
 	return (
 		<div className='min-h-screen'>
+			{/* Success Notification */}
+			{showSuccess && (
+				<div className='fixed top-20 right-4 z-50 animate-fade-in'>
+					<div className='flex items-center gap-3 rounded-xl bg-slate-900 px-4 py-3 text-white shadow-2xl shadow-slate-900/40 dark:bg-slate-100 dark:text-slate-900'>
+						<div className='flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500'>
+							<Clock className='h-3.5 w-3.5 text-white' />
+						</div>
+
+						<div>
+							<p className='font-semibold text-[10px] uppercase tracking-wider'>
+								Stored in your drafts
+							</p>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{/* Header */}
 			<header className='sticky top-0 z-40 glass border-b border-slate-200/70 dark:border-slate-700/60'>
 				<div className='mx-auto max-w-6xl px-4 sm:px-6'>
@@ -294,7 +314,10 @@ export default function HomeClient({ children }: HomeClientProps) {
 				<div className='flex flex-col lg:flex-row gap-8'>
 					{/* Left Column - Form */}
 					<div className='lg:w-[55%] lg:shrink-0'>
-						<InvoiceForm data={invoiceData} onChange={setInvoiceData} />
+						<InvoiceForm
+							data={invoiceData}
+							onChange={setInvoiceData}
+						/>
 					</div>
 
 					{/* Right Column - Preview */}
