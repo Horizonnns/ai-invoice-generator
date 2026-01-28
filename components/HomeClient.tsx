@@ -19,12 +19,11 @@ import {
 	calculateTotal,
 	createEmptyItem,
 	formatCurrency,
-	formatDate,
 	generateInvoiceNumber,
 	getDefaultDueDate,
 	getTodayDate
 } from '@/utils/helpers'
-import { Clock, FileText } from 'lucide-react'
+import { Clock, Download, FileText, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
@@ -269,146 +268,103 @@ export default function HomeClient({ children }: HomeClientProps) {
 			</header>
 
 			{/* Main Content - Balanced columns */}
-			<main className='mx-auto max-w-6xl px-4 sm:px-6'>
-				{children ? (
-					<section className='mb-6 max-w-3xl'>{children}</section>
-				) : null}
-
-				<section className='mt-6 mb-8 grid gap-4 rounded-2xl border border-slate-200/70 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/50'>
-					<div className='flex flex-col gap-2'>
-						<p className='text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400'>
-							Invoice workspace
-						</p>
-						<h2 className='text-2xl font-semibold text-slate-900 dark:text-white font-display'>
-							Create, review, and export with confidence.
-						</h2>
-					</div>
-					<div className='grid gap-3 text-xs text-slate-600 dark:text-slate-300 sm:grid-cols-3'>
-						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
-							<p className='font-semibold text-slate-900 dark:text-white'>
-								Structured details
-							</p>
-							<p className='mt-1 text-[11px]'>
-								Clean fields for clients, terms, and totals.
-							</p>
-						</div>
-						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
-							<p className='font-semibold text-slate-900 dark:text-white'>
-								Magic Fill ready
-							</p>
-							<p className='mt-1 text-[11px]'>
-								Drop in text or voice and polish the draft.
-							</p>
-						</div>
-						<div className='rounded-xl border border-slate-200/70 bg-white/80 p-3 shadow-sm dark:border-slate-700/60 dark:bg-slate-900/60'>
-							<p className='font-semibold text-slate-900 dark:text-white'>
-								PDF perfect
-							</p>
-							<p className='mt-1 text-[11px]'>
-								Export client-ready invoices with one click.
-							</p>
-						</div>
-					</div>
-				</section>
-
-				<div className='flex flex-col lg:flex-row gap-8'>
-					{/* Left Column - Form */}
-					<div className='lg:w-[55%] lg:shrink-0'>
+			<main className='mx-auto max-w-7xl px-4 sm:px-6 py-8'>
+				<div className='grid grid-cols-1 lg:grid-cols-12 gap-8 items-start'>
+					{/* Left Column: Editor (Approx 60%) */}
+					<div className='lg:col-span-7 space-y-6'>
 						<InvoiceForm
 							data={invoiceData}
 							onChange={setInvoiceData}
 						/>
 					</div>
 
-					{/* Right Column - Preview */}
-					<div className='w-full lg:w-[45%] self-start space-y-4'>
-						{historyError ? (
-							<div className='mb-3 text-xs text-red-500'>{historyError}</div>
-						) : null}
-
-						<div className='card p-4'>
-							<div className='flex items-center justify-between gap-2'>
+					{/* Right Column: Preview & Actions (Approx 40%) */}
+					<div className='lg:col-span-5 sticky top-24 space-y-6'>
+						{/* Actions Card */}
+						<div className='card p-5 flex flex-col gap-4'>
+							<div className='flex items-center justify-between'>
 								<div>
-									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400'>
-										Invoice summary
+									<h2 className='text-sm font-bold text-slate-900 dark:text-slate-200 uppercase tracking-wider'>
+										Invoice Summary
+									</h2>
+									<p className='text-xs text-slate-500 dark:text-slate-400 mt-0.5'>
+										Total due amount
 									</p>
-									<h3 className='text-lg font-semibold text-slate-900 dark:text-white font-display'>
-										{formatCurrency(total)}
-									</h3>
 								</div>
+								<div className='text-right'>
+									<div className='text-xl font-display font-bold text-slate-900 dark:text-white'>
+										{formatCurrency(total)}
+									</div>
+									<p className='text-[10px] text-slate-500 dark:text-slate-400 font-medium'>
+										{invoiceData.items.length} items • Tax:{' '}
+										{formatCurrency(taxAmount)}
+									</p>
+								</div>
+							</div>
+
+							<div className='h-px bg-slate-200 dark:bg-slate-800 w-full' />
+
+							<div className='grid grid-cols-2 gap-3'>
 								<button
 									onClick={handleSaveDraft}
-									className='btn-primary text-xs'
-									disabled={!user || isSaving}
+									disabled={isSaving || !user}
+									className='flex items-center justify-center gap-2 h-11 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-200 text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
 								>
-									{isSaving ? 'Saving...' : 'Save draft'}
+									{isSaving ? (
+										<span className='animate-pulse'>Saving...</span>
+									) : (
+										'Save Draft'
+									)}
+								</button>
+
+								<button
+									onClick={handleDownload}
+									disabled={isDownloading}
+									style={{
+										padding: '8px 14px',
+										background:
+											'linear-gradient(135deg, #0b1b2b 0%, #1e3550 55%, #b08968 100%)',
+										borderRadius: '10px',
+										color: '#ffffff',
+										fontWeight: '500',
+										fontSize: '13px',
+										border: 'none',
+										cursor: 'pointer',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										gap: '6px',
+										zIndex: 10,
+										boxShadow: '0 10px 20px rgba(11, 27, 43, 0.25)',
+										opacity: isDownloading ? 0.6 : 1
+									}}
+								>
+									{isDownloading ? (
+										<>
+											<Loader2
+												style={{
+													width: '14px',
+													height: '14px',
+													animation: 'spin 1s linear infinite'
+												}}
+											/>
+											Generating...
+										</>
+									) : (
+										<>
+											<Download style={{ width: '14px', height: '14px' }} />
+											Download PDF
+										</>
+									)}
 								</button>
 							</div>
-							<div className='mt-3 grid grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-300'>
-								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
-									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
-										Client
-									</p>
-									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
-										{invoiceData.recipient.name || 'Client name'}
-									</p>
-								</div>
-								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
-									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
-										Items
-									</p>
-									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
-										{invoiceData.items.length}
-									</p>
-								</div>
-								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
-									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
-										Issue date
-									</p>
-									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
-										{invoiceData.issueDate
-											? formatDate(invoiceData.issueDate)
-											: '-'}
-									</p>
-								</div>
-								<div className='rounded-lg border border-slate-200/70 bg-white/70 p-2 dark:border-slate-700/60 dark:bg-slate-900/40'>
-									<p className='text-[11px] uppercase tracking-[0.2em] text-slate-400'>
-										Due date
-									</p>
-									<p className='mt-1 font-semibold text-slate-800 dark:text-slate-100'>
-										{invoiceData.dueDate
-											? formatDate(invoiceData.dueDate)
-											: '-'}
-									</p>
-								</div>
-							</div>
-							<div className='mt-3 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300'>
-								<span>Subtotal</span>
-								<span className='font-semibold text-slate-800 dark:text-slate-100'>
-									{formatCurrency(subtotal)}
-								</span>
-							</div>
-							{(invoiceData.tax || 0) > 0 ? (
-								<div className='mt-2 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300'>
-									<span>Tax ({invoiceData.tax}%)</span>
-									<span className='font-semibold text-slate-800 dark:text-slate-100'>
-										{formatCurrency(taxAmount)}
-									</span>
-								</div>
-							) : null}
-							{!user ? (
-								<p className='mt-3 text-[11px] text-slate-500 dark:text-slate-400'>
-									Sign in to save drafts to history.
-								</p>
-							) : null}
 						</div>
 
-						<div className='sticky top-24'>
+						{/* Interactive Preview */}
+						<div className='relative group perspective-1000'>
 							<InvoicePreview
 								ref={previewRef}
 								data={invoiceData}
-								isDownloading={isDownloading}
-								onDownload={handleDownload}
 							/>
 						</div>
 					</div>

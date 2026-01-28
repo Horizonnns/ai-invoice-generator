@@ -8,13 +8,11 @@ import {
 	formatCurrency,
 	formatDate
 } from '@/utils/helpers'
-import { Download, FileText, Loader2 } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InvoicePreviewProps {
 	data: InvoiceData
-	isDownloading?: boolean
-	onDownload?: () => void
 }
 
 export interface InvoicePreviewRef {
@@ -63,7 +61,7 @@ const convertOklchToRgb = (element: HTMLElement) => {
 }
 
 const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
-	({ data, isDownloading, onDownload }, ref) => {
+	({ data }, ref) => {
 		const invoiceRef = useRef<HTMLDivElement>(null)
 
 		const subtotal = calculateSubtotal(data.items)
@@ -399,50 +397,6 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 		return (
 			<div className='bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-black/40 overflow-hidden border border-slate-200/70 dark:border-slate-800/80 relative'>
-				{/* Download PDF Button - Top Right Corner */}
-				<button
-					onClick={onDownload}
-					disabled={isDownloading}
-					style={{
-						position: 'absolute',
-						top: '12px',
-						right: '12px',
-						padding: '8px 14px',
-						background:
-							'linear-gradient(135deg, #0b1b2b 0%, #1e3550 55%, #b08968 100%)',
-						borderRadius: '10px',
-						color: '#ffffff',
-						fontWeight: '500',
-						fontSize: '13px',
-						border: 'none',
-						cursor: 'pointer',
-						display: 'flex',
-						alignItems: 'center',
-						gap: '6px',
-						boxShadow: '0 10px 20px rgba(11, 27, 43, 0.25)',
-						zIndex: 10,
-						opacity: isDownloading ? 0.6 : 1
-					}}
-				>
-					{isDownloading ? (
-						<>
-							<Loader2
-								style={{
-									width: '14px',
-									height: '14px',
-									animation: 'spin 1s linear infinite'
-								}}
-							/>
-							Generating...
-						</>
-					) : (
-						<>
-							<Download style={{ width: '14px', height: '14px' }} />
-							Download PDF
-						</>
-					)}
-				</button>
-
 				<div
 					ref={invoiceRef}
 					style={{
