@@ -218,12 +218,12 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					doc
 						.fillColor(colors.ink)
-						.fontSize(18)
+						.fontSize(20)
 						.font('SpaceGrotesk-Bold')
 						.text(data.sender.name || 'Your Business', 40, partyY + 22)
 						.text(data.recipient.name || 'Client Name', 300, partyY + 22)
 
-					doc.fillColor(colors.muted).fontSize(12).font('SpaceGrotesk')
+					doc.fillColor(colors.muted).fontSize(14).font('SpaceGrotesk')
 
 					let currentPartyY = partyY + 50
 					doc.text(data.sender.email || '', 40, currentPartyY)
@@ -522,7 +522,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontWeight: '600',
 									color: previewColors.ink,
-									fontSize: '14px',
+									fontSize: '18px',
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -531,7 +531,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							</p>
 							<p
 								style={{
-									fontSize: '12px',
+									fontSize: '14px',
 									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -541,7 +541,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							</p>
 							<p
 								style={{
-									fontSize: '12px',
+									fontSize: '14px',
 									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -552,7 +552,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							{data.sender.phone && (
 								<p
 									style={{
-										fontSize: '12px',
+										fontSize: '14px',
 										color: previewColors.muted,
 										margin: 0
 									}}
@@ -578,7 +578,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{
 									fontWeight: '600',
 									color: previewColors.ink,
-									fontSize: '14px',
+									fontSize: '16px',
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
 								}}
@@ -587,7 +587,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							</p>
 							<p
 								style={{
-									fontSize: '12px',
+									fontSize: '14px',
 									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -597,7 +597,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							</p>
 							<p
 								style={{
-									fontSize: '12px',
+									fontSize: '14px',
 									color: previewColors.muted,
 									margin: '0 0 2px 0',
 									wordBreak: 'break-word'
@@ -608,7 +608,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							{data.recipient.phone && (
 								<p
 									style={{
-										fontSize: '12px',
+										fontSize: '14px',
 										color: previewColors.muted,
 										margin: 0
 									}}
