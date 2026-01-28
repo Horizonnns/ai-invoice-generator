@@ -1,10 +1,10 @@
 'use client'
 
+import VoiceInput from '@/components/VoiceInput'
 import type { ParsedInvoiceResponse } from '@/types/invoice'
-import { Loader2, Sparkles, Wand2, X } from 'lucide-react'
+import { Brain, CornerDownLeft, HelpCircle, Loader2, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import VoiceInput from './VoiceInput'
 
 interface MagicFillProps {
 	onFill: (data: ParsedInvoiceResponse) => void
@@ -17,7 +17,6 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
-	// Prevent body scroll when modal is open
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = 'hidden'
@@ -31,22 +30,17 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 
 	const handleSubmit = async () => {
 		if (!text.trim()) return
-
 		setIsLoading(true)
 		setError(null)
 
 		try {
 			const response = await fetch(`${apiBaseUrl}/api/parse-invoice`, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ text })
 			})
 
-			if (!response.ok) {
-				throw new Error('Failed to parse invoice data')
-			}
+			if (!response.ok) throw new Error('Failed to parse invoice data')
 
 			const data: ParsedInvoiceResponse = await response.json()
 			onFill(data)
@@ -61,88 +55,76 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 
 	const modalContent = isOpen ? (
 		<div
+			className='fixed inset-0 z-100 flex items-center justify-center p-4'
 			style={{
-				position: 'fixed',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				width: '100vw',
-				height: '100vh',
 				backgroundColor: 'rgba(0, 0, 0, 0.5)',
-				backdropFilter: 'blur(8px)',
-				WebkitBackdropFilter: 'blur(8px)',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				zIndex: 9999,
-				padding: '16px'
+				backdropFilter: 'blur(10px)',
+				WebkitBackdropFilter: 'blur(10px)'
 			}}
-			onClick={e => {
-				if (e.target === e.currentTarget) {
-					setIsOpen(false)
-				}
-			}}
+			onClick={e => e.target === e.currentTarget && setIsOpen(false)}
 		>
-			<div className='bg-white dark:bg-slate-900 dark:text-slate-100 rounded-xl shadow-2xl w-full max-w-md overflow-hidden'>
-				{/* Header */}
-				<div
-					className='px-4 py-3 flex items-center justify-between'
-					style={{
-						background:
-							'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)'
-					}}
-				>
-					<div className='flex items-center gap-2 text-white'>
-						<div className='p-1.5 bg-white/20 rounded-md'>
-							<Wand2 className='w-4 h-4' />
-						</div>
-						<div>
-							<h3 className='font-semibold text-sm'>AI Magic Fill</h3>
-							<p className='text-white/80 text-xs'>
-								Describe your invoice in plain text
-							</p>
-						</div>
+			<div className='bg-white dark:bg-[#111111] rounded-[20px] shadow-[0_0_50px_rgba(0,0,0,0.3)] w-full max-w-xl overflow-hidden border border-slate-200 dark:border-white/5 animate-in fade-in zoom-in duration-300'>
+				{/* Workspace Header: Minimal */}
+				<div className='px-6 py-4 flex items-center justify-between border-b border-slate-100 dark:border-white/5'>
+					<div className='flex items-center gap-2'>
+						<div className='w-2 h-2 rounded-full bg-emerald-500' />
+						<span className='text-[10px] font-bold text-slate-400 uppercase tracking-widest'>
+							AI Workspace Active
+						</span>
 					</div>
 					<button
 						onClick={() => setIsOpen(false)}
-						className='p-1.5 hover:bg-white/20 rounded-md transition-colors text-white'
+						className='text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors'
 					>
 						<X className='w-4 h-4' />
 					</button>
 				</div>
 
-				{/* Body */}
-				<div className='p-4'>
-					<textarea
-						value={text}
-						onChange={e => setText(e.target.value)}
-						placeholder='Example: I did 5 hours of design work at $50/hour for John Doe from Acme Corp. My business name is Creative Studio and my email is hello@creative.com.'
-						className='input-field h-28 resize-none text-sm'
-						disabled={isLoading}
-					/>
+				<div className='p-8 pb-6'>
+					<div className='space-y-4'>
+						<h3 className='text-3xl font-display font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1]'>
+							Describe your <br /> invoice details
+						</h3>
 
-					{error && (
-						<div className='mt-2 p-2 bg-red-50 border border-red-200 text-red-600 dark:bg-red-950/40 dark:border-red-900/60 dark:text-red-300 rounded-md text-xs'>
-							{error}
+						<div className='relative mt-6'>
+							<textarea
+								value={text}
+								onChange={e => setText(e.target.value)}
+								placeholder='Explain the details...'
+								className='w-full h-32 p-0 text-lg font-medium bg-transparent border-none focus:ring-0 outline-none resize-none placeholder:text-slate-300 dark:placeholder:text-slate-800 dark:text-white'
+								disabled={isLoading}
+								autoFocus
+							/>
 						</div>
-					)}
-
-					{/* Voice Input */}
-					<div className='mt-3 flex items-center justify-between p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/15 dark:to-purple-500/15 rounded-lg border border-indigo-100 dark:border-indigo-500/30'>
-						<span className='text-xs font-medium text-indigo-700 dark:text-indigo-200'>
-							Or use voice input:
-						</span>
-						<VoiceInput
-							onTranscript={transcript => setText(transcript)}
-							disabled={isLoading}
-						/>
 					</div>
 
-					<div className='mt-3 flex gap-2'>
+					{error && (
+						<div className='mt-2 text-xs font-bold text-rose-500'>{error}</div>
+					)}
+				</div>
+
+				{/* Toolbar: Clean & Utility focused */}
+				<div className='px-6 py-4 bg-slate-50 dark:bg-white/5 flex items-center justify-between border-t border-slate-100 dark:border-white/5'>
+					<div className='flex items-center gap-4'>
+						<div className='flex items-center'>
+							<VoiceInput
+								onTranscript={t => setText(t)}
+								disabled={isLoading}
+							/>
+						</div>
+
+						<div className='group relative'>
+							<HelpCircle className='w-4 h-4 text-slate-300 cursor-help hover:text-slate-500 transition-colors' />
+							<div className='absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900 text-[10px] text-white rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity'>
+								Mention: Business name, client name, services, rates and totals.
+							</div>
+						</div>
+					</div>
+
+					<div className='flex items-center gap-3'>
 						<button
 							onClick={() => setIsOpen(false)}
-							className='btn-secondary flex-1'
+							className='text-xs font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors px-4'
 							disabled={isLoading}
 						>
 							Cancel
@@ -150,34 +132,19 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 						<button
 							onClick={handleSubmit}
 							disabled={isLoading || !text.trim()}
-							className='btn-primary flex-1 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed'
+							className='h-11 px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold rounded-xl flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md shadow-slate-900/10 dark:shadow-none'
 						>
 							{isLoading ? (
-								<>
-									<Loader2 className='w-4 h-4 animate-spin' />
-									Processing...
-								</>
+								<Loader2 className='w-4 h-4 animate-spin' />
 							) : (
-								<>
-									<Sparkles className='w-4 h-4' />
-									Fill Invoice
-								</>
+								(
+									<>
+										<span>Process</span>
+										<CornerDownLeft className='w-3.5 h-3.5 opacity-50' />
+									</>
+								) || 'Process Draft'
 							)}
 						</button>
-					</div>
-				</div>
-
-				{/* Tips */}
-				<div className='px-4 pb-4'>
-					<div className='p-3 bg-linear-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/15 dark:to-purple-500/15 rounded-lg border border-indigo-100 dark:border-indigo-500/30'>
-						<p className='text-xs text-indigo-700 dark:text-indigo-200 font-medium mb-1.5'>
-							💡 Tips for best results:
-						</p>
-						<ul className='text-[11px] text-indigo-600 dark:text-indigo-200/80 space-y-0.5'>
-							<li>• Include your business name and contact info</li>
-							<li>• Mention the client's name and company</li>
-							<li>• Describe services with quantities and rates</li>
-						</ul>
 					</div>
 				</div>
 			</div>
@@ -188,16 +155,10 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		<>
 			<button
 				onClick={() => setIsOpen(true)}
-				className='group relative flex items-center justify-center w-9 h-9 rounded-lg font-medium text-white text-sm overflow-hidden transition-all duration-300 hover:scale-105'
-				style={{
-					background:
-						'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)',
-					boxShadow: '0 3px 12px rgba(99, 102, 241, 0.35)'
-				}}
-				title='Magic Fill'
+				className='w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 shadow-sm border border-slate-200 dark:border-slate-700'
+				title='AI Workspace'
 			>
-				<div className='absolute inset-0 bg-linear-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700' />
-				<Wand2 className='w-4 h-4' />
+				<Brain className='w-4 h-4' />
 			</button>
 			{modalContent && createPortal(modalContent, document.body)}
 		</>
