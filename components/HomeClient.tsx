@@ -231,7 +231,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 
 			{/* Header */}
 			<header className='sticky top-0 z-40 glass border-b border-slate-200/70 dark:border-slate-700/60'>
-				<div className='mx-auto max-w-6xl px-4 sm:px-6'>
+				<div className='mx-auto max-w-7xl px-4 sm:px-6'>
 					<div className='flex items-center justify-between h-16'>
 						<div className='flex items-center gap-2.5'>
 							<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25'>
