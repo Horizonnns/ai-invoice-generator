@@ -172,7 +172,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 			{/* Success Notification */}
 			{showSuccess && (
 				<div className='fixed top-20 right-4 z-50 animate-fade-in'>
-					<div className='flex items-center gap-3 rounded-xl bg-slate-900 px-4 py-3 text-white shadow-2xl shadow-slate-900/40 dark:bg-slate-100 dark:text-slate-900'>
+					<div className='flex items-center gap-3 rounded-xl dark:bg-slate-900 px-4 py-3 dark:text-white shadow-2xl shadow-slate-900/40 bg-slate-100 text-slate-900'>
 						<div className='flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500'>
 							<Clock className='h-3.5 w-3.5 text-white' />
 						</div>
