@@ -51,6 +51,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 	const [user, setUser] = useState<AuthUser | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
 	const [showSuccess, setShowSuccess] = useState(false)
+	const [draftCount, setDraftCount] = useState(0)
 	const subtotal = calculateSubtotal(invoiceData.items)
 	const taxAmount = calculateTax(subtotal, invoiceData.tax || 0)
 	const total = calculateTotal(subtotal, taxAmount)
@@ -79,6 +80,24 @@ export default function HomeClient({ children }: HomeClientProps) {
 		}
 		loadSession()
 	}, [apiBaseUrl])
+
+	useEffect(() => {
+		if (!user) {
+			setDraftCount(0)
+			return
+		}
+		const fetchDraftsCount = async () => {
+			try {
+				const res = await fetch(`${apiBaseUrl}/api/invoices`)
+				if (res.ok) {
+					const { invoices } = await res.json()
+					const drafts = invoices.filter((inv: any) => inv.status === 'draft')
+					setDraftCount(drafts.length)
+				}
+			} catch {}
+		}
+		fetchDraftsCount()
+	}, [user, apiBaseUrl])
 
 	useEffect(() => {
 		const stored = window.localStorage.getItem('invoiceDraft')
@@ -159,6 +178,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 				throw new Error('Failed to save draft')
 			}
 			await res.json()
+			setDraftCount(prev => prev + 1)
 			setShowSuccess(true)
 			setTimeout(() => setShowSuccess(false), 3000)
 		} catch (error) {
@@ -213,6 +233,11 @@ export default function HomeClient({ children }: HomeClientProps) {
 								title='History'
 							>
 								<Clock className='relative h-4 w-4' />
+								{user && draftCount > 0 && (
+									<span className='absolute -top-1.5 -right-1.5 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-slate-900 animate-in zoom-in duration-300'>
+										{draftCount}
+									</span>
+								)}
 							</Link>
 
 							<AuthControls
