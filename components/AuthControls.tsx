@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 type AuthControlsProps = {
 	user: AuthUser | null
 	onAuth: (user: AuthUser | null) => void
-	apiBaseUrl: string
+	apiBaseUrl: string | undefined
 }
 
 declare global {
@@ -44,7 +44,6 @@ export default function AuthControls({
 
 	useEffect(() => {
 		if (user || !clientId || !buttonRef.current) return
-
 		const initialize = () => {
 			if (!window.google?.accounts?.id || !buttonRef.current) return
 			window.google.accounts.id.initialize({
@@ -56,15 +55,13 @@ export default function AuthControls({
 					try {
 						const res = await fetch(`${apiBaseUrl}/api/auth/google`, {
 							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json'
-							},
+							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify({ credential: response.credential }),
 							credentials: 'include'
 						})
-						if (!res.ok) {
-							throw new Error('Google sign-in failed')
-						}
+
+						if (!res.ok) throw new Error('Google sign-in failed')
+
 						const data = await res.json()
 						onAuth(data.user)
 					} catch (err) {
@@ -72,6 +69,7 @@ export default function AuthControls({
 					}
 				}
 			})
+
 			window.google.accounts.id.renderButton(buttonRef.current, {
 				type: 'icon',
 				theme: 'outline',
@@ -170,6 +168,7 @@ export default function AuthControls({
 							/>
 						</svg>
 					</div>
+
 					<div
 						ref={buttonRef}
 						className='absolute inset-0 opacity-0'

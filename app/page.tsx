@@ -1,8 +1,7 @@
 import HomeClient from '@/components/HomeClient'
 
 export default function HomePage() {
-	const siteUrl =
-		process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+	const siteUrl = process.env.NEXT_PUBLIC_URL
 	const jsonLd = {
 		'@context': 'https://schema.org',
 		'@type': 'SoftwareApplication',
@@ -32,9 +31,9 @@ export default function HomePage() {
 					<h1>AI Invoice Generator</h1>
 					<h2>Create invoices in minutes, not hours</h2>
 					<p>
-						AI Invoice Generator helps freelancers and small teams
-						build beautiful invoices fast. Use Magic Fill, preview
-						live, and download a clean PDF when you are ready.
+						AI Invoice Generator helps freelancers and small teams build
+						beautiful invoices fast. Use Magic Fill, preview live, and download
+						a clean PDF when you are ready.
 					</p>
 					<h2>How it works</h2>
 					<ol>

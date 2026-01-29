@@ -31,18 +31,8 @@ const defaultInvoiceData: InvoiceData = {
 	invoiceNumber: '',
 	issueDate: getTodayDate(),
 	dueDate: getDefaultDueDate(),
-	sender: {
-		name: '',
-		email: '',
-		address: '',
-		phone: ''
-	},
-	recipient: {
-		name: '',
-		email: '',
-		address: '',
-		phone: ''
-	},
+	sender: { name: '', email: '', address: '', phone: '' },
+	recipient: { name: '', email: '', address: '', phone: '' },
 	items: [createEmptyItem()],
 	notes: '',
 	tax: undefined
@@ -53,13 +43,12 @@ type HomeClientProps = {
 }
 
 export default function HomeClient({ children }: HomeClientProps) {
-	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+	const apiBaseUrl = process.env.NEXT_PUBLIC_URL
 	const [invoiceData, setInvoiceData] =
 		useState<InvoiceData>(defaultInvoiceData)
 	const [isDownloading, setIsDownloading] = useState(false)
 	const previewRef = useRef<InvoicePreviewRef>(null)
 	const [user, setUser] = useState<AuthUser | null>(null)
-	const [historyError, setHistoryError] = useState<string | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
 	const [showSuccess, setShowSuccess] = useState(false)
 	const subtotal = calculateSubtotal(invoiceData.items)
@@ -71,10 +60,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 		setInvoiceData(prev =>
 			prev.invoiceNumber
 				? prev
-				: {
-						...prev,
-						invoiceNumber: generateInvoiceNumber()
-					}
+				: { ...prev, invoiceNumber: generateInvoiceNumber() }
 		)
 	}, [])
 
@@ -107,26 +93,6 @@ export default function HomeClient({ children }: HomeClientProps) {
 		}
 	}, [])
 
-	useEffect(() => {
-		const loadHistory = async () => {
-			setHistoryError(null)
-			try {
-				const res = await fetch(`${apiBaseUrl}/api/invoices`, {
-					credentials: 'include'
-				})
-				if (!res.ok) {
-					throw new Error('Failed to load history')
-				}
-				const data = await res.json()
-			} catch (error) {
-				setHistoryError(
-					error instanceof Error ? error.message : 'Failed to load history'
-				)
-			}
-		}
-		loadHistory()
-	}, [apiBaseUrl, user])
-
 	const handleDownload = async () => {
 		if (!previewRef.current) return
 		setIsDownloading(true)
@@ -141,10 +107,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 		const updatedData = { ...invoiceData }
 
 		if (parsedData.sender) {
-			updatedData.sender = {
-				...invoiceData.sender,
-				...parsedData.sender
-			}
+			updatedData.sender = { ...invoiceData.sender, ...parsedData.sender }
 		}
 
 		if (parsedData.recipient) {
@@ -182,13 +145,10 @@ export default function HomeClient({ children }: HomeClientProps) {
 	const handleSaveDraft = async () => {
 		if (!user) return
 		setIsSaving(true)
-		setHistoryError(null)
 		try {
 			const res = await fetch(`${apiBaseUrl}/api/invoices`, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				credentials: 'include',
 				body: JSON.stringify({
 					status: 'draft',
@@ -198,13 +158,10 @@ export default function HomeClient({ children }: HomeClientProps) {
 			if (!res.ok) {
 				throw new Error('Failed to save draft')
 			}
-			const data = await res.json()
+			await res.json()
 			setShowSuccess(true)
 			setTimeout(() => setShowSuccess(false), 3000)
 		} catch (error) {
-			setHistoryError(
-				error instanceof Error ? error.message : 'Failed to save draft'
-			)
 		} finally {
 			setIsSaving(false)
 		}
@@ -220,11 +177,9 @@ export default function HomeClient({ children }: HomeClientProps) {
 							<Clock className='h-3.5 w-3.5 text-white' />
 						</div>
 
-						<div>
-							<p className='font-semibold text-[10px] uppercase tracking-wider'>
-								Stored in your drafts
-							</p>
-						</div>
+						<p className='font-semibold text-[10px] uppercase tracking-wider'>
+							Stored in your drafts
+						</p>
 					</div>
 				</div>
 			)}
@@ -237,6 +192,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 							<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25'>
 								<FileText className='w-5 h-5 text-white' />
 							</div>
+
 							<div>
 								<h1 className='text-lg font-bold text-slate-900 dark:text-slate-100 font-display'>
 									AI Invoice Generator
@@ -246,6 +202,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 								</p>
 							</div>
 						</div>
+
 						<div className='flex items-center gap-2.5'>
 							<MagicFill onFill={handleMagicFill} />
 							<ThemeToggle />
@@ -257,6 +214,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 							>
 								<Clock className='relative h-4 w-4' />
 							</Link>
+
 							<AuthControls
 								user={user}
 								onAuth={setUser}
@@ -291,10 +249,12 @@ export default function HomeClient({ children }: HomeClientProps) {
 										Total due amount
 									</p>
 								</div>
+
 								<div className='text-right'>
 									<div className='text-xl font-display font-bold text-slate-900 dark:text-white'>
 										{formatCurrency(total)}
 									</div>
+
 									<p className='text-[10px] text-slate-500 dark:text-slate-400 font-medium'>
 										{invoiceData.items.length} items • Tax:{' '}
 										{formatCurrency(taxAmount)}

@@ -13,7 +13,7 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 	const [isProcessing, setIsProcessing] = useState(false)
 	const [audioLevel, setAudioLevel] = useState(0)
 
-	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+	const apiBaseUrl = process.env.NEXT_PUBLIC_URL
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null)
 	const audioChunksRef = useRef<Blob[]>([])
 	const audioContextRef = useRef<AudioContext | null>(null)
@@ -157,6 +157,7 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 								/>
 							))}
 						</div>
+
 						<span>Stop Recording</span>
 					</div>
 				) : (

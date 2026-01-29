@@ -11,7 +11,7 @@ interface MagicFillProps {
 }
 
 const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
-	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+	const apiBaseUrl = process.env.NEXT_PUBLIC_URL
 	const [isOpen, setIsOpen] = useState(false)
 	const [text, setText] = useState('')
 	const [isLoading, setIsLoading] = useState(false)

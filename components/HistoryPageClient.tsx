@@ -3,12 +3,12 @@
 import AuthControls from '@/components/AuthControls'
 import InvoiceHistory from '@/components/InvoiceHistory'
 import type { AuthUser, InvoiceRecord } from '@/types/invoice'
-import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function HistoryPageClient() {
-	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+	const apiBaseUrl = process.env.NEXT_PUBLIC_URL
 	const [user, setUser] = useState<AuthUser | null>(null)
 	const [history, setHistory] = useState<InvoiceRecord[]>([])
 	const [error, setError] = useState<string | null>(null)
@@ -75,7 +75,7 @@ export default function HistoryPageClient() {
 	}
 
 	return (
-		<div className='mx-auto max-w-4xl px-4 sm:px-6 py-10'>
+		<div className='mx-auto max-w-5xl px-4 sm:px-6 py-10'>
 			<div className='flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link
@@ -95,12 +95,14 @@ export default function HistoryPageClient() {
 						</p>
 					</div>
 				</div>
-				<AuthControls user={user} onAuth={setUser} apiBaseUrl={apiBaseUrl} />
+				<AuthControls
+					user={user}
+					onAuth={setUser}
+					apiBaseUrl={apiBaseUrl}
+				/>
 			</div>
 
-			{error ? (
-				<div className='mb-3 text-xs text-red-500'>{error}</div>
-			) : null}
+			{error ? <div className='mb-3 text-xs text-red-500'>{error}</div> : null}
 
 			{user ? (
 				<InvoiceHistory

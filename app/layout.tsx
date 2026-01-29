@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next'
-import { Space_Grotesk, Source_Serif_4 } from 'next/font/google'
+import { Source_Serif_4, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+const siteUrl = process.env.NEXT_PUBLIC_URL
 
 const spaceGrotesk = Space_Grotesk({
 	subsets: ['latin'],
