@@ -76,7 +76,7 @@ export default function HistoryPageClient() {
 
 	return (
 		<div className='mx-auto max-w-5xl px-4 sm:px-6 py-10'>
-			<div className='flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between'>
+			<div className='flex items-center justify-between gap-4 mb-8'>
 				<div className='flex items-center gap-3'>
 					<Link
 						href='/'
@@ -87,10 +87,10 @@ export default function HistoryPageClient() {
 						<ArrowLeft className='h-4 w-4' />
 					</Link>
 					<div>
-						<h1 className='text-2xl font-semibold text-slate-900 dark:text-slate-100 font-display'>
+						<h1 className='text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 font-display'>
 							History
 						</h1>
-						<p className='text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
+						<p className='hidden sm:block text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
 							Drafts and recent invoices
 						</p>
 					</div>

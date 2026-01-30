@@ -8,6 +8,7 @@ type AuthControlsProps = {
 	user: AuthUser | null
 	onAuth: (user: AuthUser | null) => void
 	apiBaseUrl: string | undefined
+	layout?: 'icon' | 'full'
 }
 
 declare global {
@@ -36,7 +37,8 @@ const scriptId = 'google-identity-script'
 export default function AuthControls({
 	user,
 	onAuth,
-	apiBaseUrl
+	apiBaseUrl,
+	layout = 'icon'
 }: AuthControlsProps) {
 	const buttonRef = useRef<HTMLDivElement>(null)
 	const [error, setError] = useState<string | null>(null)
@@ -71,12 +73,13 @@ export default function AuthControls({
 			})
 
 			window.google.accounts.id.renderButton(buttonRef.current, {
-				type: 'icon',
+				type: layout === 'full' ? 'standard' : 'icon',
 				theme: 'outline',
 				size: 'large',
-				shape: 'circle',
-				logo_alignment: 'center',
-				width: 40
+				shape: layout === 'full' ? 'rectangular' : 'circle',
+				logo_alignment: 'left',
+				width: layout === 'full' ? '220' : '40', // Approximate width for mobile menu
+				text: 'signin_with'
 			})
 		}
 
@@ -95,7 +98,7 @@ export default function AuthControls({
 			setError('Failed to load Google sign-in')
 		}
 		document.body.appendChild(script)
-	}, [apiBaseUrl, clientId, onAuth, user])
+	}, [apiBaseUrl, clientId, onAuth, user, layout])
 
 	const handleLogout = async () => {
 		setError(null)
@@ -117,7 +120,9 @@ export default function AuthControls({
 	}
 
 	return (
-		<div className='flex items-center gap-2'>
+		<div
+			className={`flex items-center ${layout === 'full' ? 'w-full' : 'gap-2'}`}
+		>
 			{user ? (
 				<>
 					<button
@@ -140,11 +145,19 @@ export default function AuthControls({
 				</>
 			) : (
 				<div
-					className='relative w-9 h-9'
+					className={`relative ${layout === 'full' ? 'w-full' : 'w-9 h-9'}`}
 					title='Sign in with Google'
 					aria-label='Sign in with Google'
 				>
-					<div className='flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white shadow-sm'>
+					{/* Fallback Custom Button when JS not loaded yet - Optional but good for UX */}
+					<div
+						className={`flex items-center justify-center border border-slate-200 bg-white shadow-sm transition-colors
+							${
+								layout === 'full'
+									? 'w-full h-10 gap-3 rounded-lg px-4 hover:bg-slate-50'
+									: 'w-9 h-9 rounded-xl'
+							}`}
+					>
 						<svg
 							aria-hidden='true'
 							viewBox='0 0 48 48'
@@ -167,11 +180,16 @@ export default function AuthControls({
 								d='M24 48c6.5 0 12-2.1 16-5.6l-7.4-5.7c-2 1.3-4.6 2.2-8.6 2.2-6.9 0-12.8-4.2-14.6-10.2l-6.9 5C6.4 41.3 14.6 48 24 48z'
 							/>
 						</svg>
+						{layout === 'full' && (
+							<span className='text-sm font-medium text-slate-600'>
+								Sign in with Google
+							</span>
+						)}
 					</div>
 
 					<div
 						ref={buttonRef}
-						className='absolute inset-0 opacity-0'
+						className='absolute inset-0 opacity-0 overflow-hidden'
 					/>
 				</div>
 			)}

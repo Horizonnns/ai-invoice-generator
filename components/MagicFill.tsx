@@ -155,11 +155,11 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 		<>
 			<button
 				onClick={() => setIsOpen(true)}
-				className='group h-9 px-3 flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm active:scale-95'
+				className='group h-9 w-9 sm:w-auto p-0 sm:px-3 flex items-center justify-center sm:justify-start gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm active:scale-95'
 				title='AI Magic Fill'
 			>
-				<Brain className='w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 group-hover:scale-110 transition-transform' />
-				<span>Magic Fill</span>
+				<Brain className='w-4 h-4 sm:w-3.5 sm:h-3.5 text-indigo-500 dark:text-indigo-400 group-hover:scale-110 transition-transform' />
+				<span className='hidden sm:inline'>Magic Fill</span>
 			</button>
 			{modalContent && createPortal(modalContent, document.body)}
 		</>
