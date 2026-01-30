@@ -428,7 +428,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 					</div>
 
 					{/* Right Column: Preview & Actions (Approx 40%) */}
-					<div className='lg:col-span-5 sticky top-24 space-y-6'>
+					<div className='lg:col-span-5 sticky top-24 space-y-4'>
 						{/* Actions Card */}
 						<div className='card p-5 flex flex-col gap-4'>
 							<div className='flex items-center justify-between'>

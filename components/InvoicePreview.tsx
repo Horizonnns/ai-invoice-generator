@@ -364,15 +364,6 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							.font('SpaceGrotesk')
 							.text(data.notes, 65, notesY + 38, { width: 470 })
 					}
-
-					doc
-						.fillColor(colors.muted)
-						.fontSize(13)
-						.font('SpaceGrotesk')
-						.text('Thank you for your business!', 40, 785, {
-							align: 'center',
-							width: 515
-						})
 					doc.end()
 
 					stream.on('finish', () => {
@@ -427,6 +418,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								style={{ width: '20px', height: '20px', color: '#ffffff' }}
 							/>
 						</div>
+
 						<div>
 							<h1
 								style={{
@@ -438,6 +430,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								INVOICE
 							</h1>
+
 							<p
 								style={{
 									fontSize: '12px',
@@ -472,6 +465,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								From
 							</p>
+
 							<p
 								style={{
 									fontWeight: '600',
@@ -483,6 +477,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.sender.name || 'Your Business'}
 							</p>
+
 							<p
 								style={{
 									fontSize: '14px',
@@ -493,6 +488,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.sender.email}
 							</p>
+
 							<p
 								style={{
 									fontSize: '14px',
@@ -503,6 +499,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.sender.address}
 							</p>
+
 							{data.sender.phone && (
 								<p
 									style={{
@@ -515,6 +512,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								</p>
 							)}
 						</div>
+
 						<div>
 							<p
 								style={{
@@ -528,6 +526,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								Bill To
 							</p>
+
 							<p
 								style={{
 									fontWeight: '600',
@@ -539,6 +538,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.recipient.name || 'Client Name'}
 							</p>
+
 							<p
 								style={{
 									fontSize: '14px',
@@ -549,6 +549,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.recipient.email}
 							</p>
+
 							<p
 								style={{
 									fontSize: '14px',
@@ -559,6 +560,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								{data.recipient.address}
 							</p>
+
 							{data.recipient.phone && (
 								<p
 									style={{
@@ -597,6 +599,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								Issue Date
 							</p>
+
 							<p
 								style={{
 									fontWeight: '500',
@@ -608,6 +611,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								{data.issueDate ? formatDate(data.issueDate) : '-'}
 							</p>
 						</div>
+
 						<div>
 							<p
 								style={{
@@ -620,6 +624,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								Due Date
 							</p>
+
 							<p
 								style={{
 									fontWeight: '500',
@@ -647,7 +652,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									<th
 										style={{
 											textAlign: 'left',
-											padding: '8px 0',
+											padding: '8px 0 8px 12px',
 											fontSize: '10px',
 											fontWeight: '600',
 											color: previewColors.muted,
@@ -656,6 +661,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									>
 										Description
 									</th>
+
 									<th
 										style={{
 											textAlign: 'center',
@@ -669,6 +675,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									>
 										Qty
 									</th>
+
 									<th
 										style={{
 											textAlign: 'right',
@@ -682,10 +689,11 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									>
 										Rate
 									</th>
+
 									<th
 										style={{
 											textAlign: 'right',
-											padding: '8px 0',
+											padding: '8px 12px 8px 0',
 											width: '90px',
 											fontSize: '10px',
 											fontWeight: '600',
@@ -697,6 +705,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									</th>
 								</tr>
 							</thead>
+
 							<tbody>
 								{data.items.map((item, index) => (
 									<tr
@@ -707,13 +716,14 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									>
 										<td
 											style={{
-												padding: '10px 8px 10px 0',
+												padding: '10px 8px 10px 12px',
 												color: previewColors.ink,
 												wordBreak: 'break-word'
 											}}
 										>
 											{item.description || '-'}
 										</td>
+
 										<td
 											style={{
 												padding: '10px 0',
@@ -723,6 +733,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 										>
 											{item.quantity ?? 0}
 										</td>
+
 										<td
 											style={{
 												padding: '10px 0',
@@ -732,9 +743,10 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 										>
 											{formatCurrency(item.rate ?? 0)}
 										</td>
+
 										<td
 											style={{
-												padding: '10px 0',
+												padding: '10px 12px 10px 0',
 												textAlign: 'right',
 												fontWeight: '500',
 												color: previewColors.ink
@@ -771,6 +783,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									{formatCurrency(subtotal)}
 								</span>
 							</div>
+
 							{(data.tax || 0) > 0 && (
 								<div
 									style={{
@@ -782,6 +795,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 									<span style={{ color: previewColors.muted }}>
 										Tax ({data.tax}%)
 									</span>
+
 									<span style={{ fontWeight: '600', color: previewColors.ink }}>
 										{formatCurrency(taxAmount)}
 									</span>
@@ -816,8 +830,7 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								padding: '12px 16px',
 								backgroundColor: previewColors.noteBg,
 								border: `1px solid ${previewColors.noteBorder}`,
-								borderRadius: '10px',
-								marginBottom: '16px'
+								borderRadius: '10px'
 							}}
 						>
 							<p
@@ -831,11 +844,12 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							>
 								Notes
 							</p>
+
 							<p
 								style={{
-									fontSize: '12px',
-									color: previewColors.inkSoft,
 									margin: 0,
+									color: previewColors.inkSoft,
+									fontSize: '12px',
 									wordBreak: 'break-word'
 								}}
 							>
@@ -843,25 +857,6 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							</p>
 						</div>
 					)}
-
-					{/* Footer */}
-					<div
-						style={{
-							paddingTop: '12px',
-							borderTop: '1px solid #f3f4f6',
-							textAlign: 'center'
-						}}
-					>
-						<p
-							style={{
-								fontSize: '12px',
-								color: previewColors.muted,
-								margin: 0
-							}}
-						>
-							Thank you for your business!
-						</p>
-					</div>
 				</div>
 			</div>
 		)
