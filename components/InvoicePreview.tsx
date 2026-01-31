@@ -674,7 +674,14 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					</div>
 
 					{/* Items Table */}
-					<div style={{ marginBottom: '20px' }}>
+					<div
+						className={data.items.length > 4 ? 'custom-scrollbar pr-1' : ''}
+						style={{
+							marginBottom: '20px',
+							maxHeight: data.items.length > 4 ? '230px' : undefined,
+							overflowY: data.items.length > 4 ? 'auto' : undefined
+						}}
+					>
 						<table
 							style={{
 								width: '100%',
@@ -686,6 +693,10 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								<tr style={{ borderBottom: '2px solid #e5e7eb' }}>
 									<th
 										style={{
+											position: 'sticky',
+											top: 0,
+											backgroundColor: '#ffffff',
+											zIndex: 10,
 											textAlign: 'left',
 											padding: '8px 0 8px 12px',
 											fontSize: '10px',
@@ -699,6 +710,10 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 									<th
 										style={{
+											position: 'sticky',
+											top: 0,
+											backgroundColor: '#ffffff',
+											zIndex: 10,
 											textAlign: 'center',
 											padding: '8px 0',
 											width: '60px',
@@ -713,6 +728,10 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 									<th
 										style={{
+											position: 'sticky',
+											top: 0,
+											backgroundColor: '#ffffff',
+											zIndex: 10,
 											textAlign: 'right',
 											padding: '8px 0',
 											width: '80px',
@@ -727,6 +746,10 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 									<th
 										style={{
+											position: 'sticky',
+											top: 0,
+											backgroundColor: '#ffffff',
+											zIndex: 10,
 											textAlign: 'right',
 											padding: '8px 12px 8px 0',
 											width: '90px',

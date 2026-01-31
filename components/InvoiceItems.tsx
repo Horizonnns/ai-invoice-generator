@@ -76,77 +76,85 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onChange }) => {
 				</div>
 
 				{/* Items */}
-				{items.map((item, index) => (
-					<div
-						key={item.id}
-						className='grid grid-cols-12 gap-2 items-center p-2 bg-gray-50 dark:bg-slate-800/40 rounded-lg border border-gray-100 dark:border-slate-700/70 hover:border-gray-200 dark:hover:border-slate-600/70 transition-all animate-fade-in'
-						style={{ animationDelay: `${index * 40}ms` }}
-					>
-						<div className='col-span-5'>
-							<input
-								type='text'
-								onChange={e =>
-									handleItemChange(item.id, 'description', e.target.value)
-								}
-								value={item.description}
-								placeholder='Service description'
-								className='input-field'
-							/>
-						</div>
-						<div className='col-span-2'>
-							<input
-								type='number'
-								min='1'
-								value={item.quantity ?? ''}
-								onChange={e =>
-									handleItemChange(
-										item.id,
-										'quantity',
-										e.target.value === ''
-											? undefined
-											: parseFloat(e.target.value)
-									)
-								}
-								className='input-field text-center'
-							/>
-						</div>
-						<div className='col-span-2'>
-							<div className='relative'>
-								<span className='absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-xs'>
-									$
-								</span>
+				<div
+					className={
+						items.length > 4
+							? 'max-h-[280px] overflow-y-auto pr-1 space-y-2 custom-scrollbar'
+							: 'space-y-2'
+					}
+				>
+					{items.map((item, index) => (
+						<div
+							key={item.id}
+							className='grid grid-cols-12 gap-2 items-center p-2 bg-gray-50 dark:bg-slate-800/40 rounded-lg border border-gray-100 dark:border-slate-700/70 hover:border-gray-200 dark:hover:border-slate-600/70 transition-all animate-fade-in'
+							style={{ animationDelay: `${index * 40}ms` }}
+						>
+							<div className='col-span-5'>
+								<input
+									type='text'
+									onChange={e =>
+										handleItemChange(item.id, 'description', e.target.value)
+									}
+									value={item.description}
+									placeholder='Service description'
+									className='input-field'
+								/>
+							</div>
+							<div className='col-span-2'>
 								<input
 									type='number'
-									min='0'
-									step='0.01'
-									value={item.rate ?? ''}
+									min='1'
+									value={item.quantity ?? ''}
 									onChange={e =>
 										handleItemChange(
 											item.id,
-											'rate',
+											'quantity',
 											e.target.value === ''
 												? undefined
 												: parseFloat(e.target.value)
 										)
 									}
-									className='input-field pl-5 text-center'
+									className='input-field text-center'
 								/>
 							</div>
+							<div className='col-span-2'>
+								<div className='relative'>
+									<span className='absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-xs'>
+										$
+									</span>
+									<input
+										type='number'
+										min='0'
+										step='0.01'
+										value={item.rate ?? ''}
+										onChange={e =>
+											handleItemChange(
+												item.id,
+												'rate',
+												e.target.value === ''
+													? undefined
+													: parseFloat(e.target.value)
+											)
+										}
+										className='input-field pl-5 text-center'
+									/>
+								</div>
+							</div>
+							<div className='col-span-2 text-right font-semibold text-gray-800 dark:text-slate-100 text-sm'>
+								${item.amount.toFixed(2)}
+							</div>
+							<div className='col-span-1 flex justify-center'>
+								<button
+									onClick={() => handleRemoveItem(item.id)}
+									disabled={items.length <= 1}
+									className='p-1.5 text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed'
+								>
+									<Trash2 className='w-3.5 h-3.5' />
+								</button>
+							</div>
 						</div>
-						<div className='col-span-2 text-right font-semibold text-gray-800 dark:text-slate-100 text-sm'>
-							${item.amount.toFixed(2)}
-						</div>
-						<div className='col-span-1 flex justify-center'>
-							<button
-								onClick={() => handleRemoveItem(item.id)}
-								disabled={items.length <= 1}
-								className='p-1.5 text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed'
-							>
-								<Trash2 className='w-3.5 h-3.5' />
-							</button>
-						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</div>
 	)
