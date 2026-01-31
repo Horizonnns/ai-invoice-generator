@@ -23,7 +23,7 @@ const previewColors = {
 	ink: '#0b1b2b',
 	inkSoft: '#1f2937',
 	muted: '#6b7280',
-	line: '#e2e8f0',
+	line: '#e9d7c2',
 	surface: '#f8f4ee',
 	accent: '#b08968',
 	accentDark: '#8f6b4f',
@@ -196,66 +196,73 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					doc
 						.fillColor(colors.ink)
-						.fontSize(28)
+						.fontSize(26)
 						.font('SpaceGrotesk-Bold')
-						.text('INVOICE', 100, 43)
+						.text('INVOICE', 100, 48)
 					doc
 						.fillColor(colors.muted)
 						.fontSize(14)
 						.font('SpaceGrotesk')
-						.text(data.invoiceNumber || '-', 100, 71)
+						.text(data.invoiceNumber || '-', 100, 75)
 
 					// 2. Parties
 					const partyY = 125
 					doc
 						.fillColor(colors.muted)
-						.fontSize(12)
+						.fontSize(10)
 						.font('SpaceGrotesk-Bold')
 						.text('FROM', 40, partyY)
 						.text('BILL TO', 300, partyY)
 
 					doc
 						.fillColor(colors.ink)
-						.fontSize(20)
 						.font('SpaceGrotesk-Bold')
-						.text(data.sender.name || 'Your Business', 40, partyY + 22)
-						.text(data.recipient.name || 'Client Name', 300, partyY + 22)
+						.fontSize(18)
+						.text(data.sender.name || 'Your Business', 40, partyY + 15)
 
-					doc.fillColor(colors.muted).fontSize(14).font('SpaceGrotesk')
+					doc
+						.fontSize(16)
+						.text(data.recipient.name || 'Client Name', 300, partyY + 15)
 
-					let currentPartyY = partyY + 50
+					doc.fillColor(colors.muted).fontSize(12).font('SpaceGrotesk')
+
+					let currentPartyY = partyY + 40
 					doc.text(data.sender.email || '', 40, currentPartyY)
-					doc.text(data.sender.address || '', 40, doc.y + 3, { width: 240 })
-					if (data.sender.phone) doc.text(data.sender.phone, 40, doc.y + 3)
+					doc.text(data.sender.address || '', 40, doc.y + 2, { width: 240 })
+					if (data.sender.phone) doc.text(data.sender.phone, 40, doc.y + 2)
 
-					currentPartyY = partyY + 50
+					currentPartyY = partyY + 40
 					doc.text(data.recipient.email || '', 300, currentPartyY)
-					doc.text(data.recipient.address || '', 300, doc.y + 3, { width: 240 })
+					doc.text(data.recipient.address || '', 300, doc.y + 2, { width: 240 })
 					if (data.recipient.phone)
-						doc.text(data.recipient.phone, 300, doc.y + 3)
+						doc.text(data.recipient.phone, 300, doc.y + 2)
 
 					// 3. Issue & Due Date Box
-					const datesY = Math.max(doc.y + 40, 260)
-					doc.roundedRect(40, datesY, 515, 75, 14).fillColor('#f8f9fa').fill()
+					const datesY = Math.max(doc.y + 30, 240)
+					doc
+						.roundedRect(40, datesY, 515, 65, 12)
+						.fillColor(previewColors.surface)
+						.fillAndStroke(previewColors.surface, previewColors.line)
+
 					doc
 						.fillColor(colors.muted)
 						.fontSize(12)
 						.font('SpaceGrotesk-Bold')
-						.text('ISSUE DATE', 65, datesY + 22)
-						.text('DUE DATE', 250, datesY + 22)
+						.text('ISSUE DATE', 60, datesY + 16)
+						.text('DUE DATE', 250, datesY + 16)
 					doc
 						.fillColor(colors.ink)
-						.fontSize(18)
-						.font('SpaceGrotesk-Bold')
+						.fontSize(16)
+						.font('SpaceGrotesk') // Using medium weight equivalent (Regular for now)
 						.text(
 							data.issueDate ? formatDate(data.issueDate) : '-',
-							65,
-							datesY + 44
+							60,
+							datesY + 32
 						)
 						.text(
 							data.dueDate ? formatDate(data.dueDate) : '-',
 							250,
-							datesY + 44
+							datesY + 32
 						)
 
 					// 4. Table
@@ -264,19 +271,36 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						.fillColor(colors.muted)
 						.fontSize(12)
 						.font('SpaceGrotesk-Bold')
-						.text('DESCRIPTION', 40, tableY)
+						.text('DESCRIPTION', 52, tableY) // Left padding 12px
 						.text('QTY', 330, tableY, { width: 40, align: 'center' })
 						.text('RATE', 410, tableY, { width: 60, align: 'right' })
-						.text('AMOUNT', 485, tableY, { width: 70, align: 'right' })
+						.text('AMOUNT', 473, tableY, { width: 70, align: 'right' }) // Right padding 12px
 					drawLine(tableY + 24)
 
-					let currentY = tableY + 42
-					data.items.forEach(item => {
+					let currentY = tableY + 45
+					data.items.forEach((item, index) => {
+						// Zebra striping for even rows
+						if (index % 2 === 0) {
+							doc
+								.roundedRect(
+									40,
+									currentY - 18,
+									515,
+									data.items.length > 5 ? 45 : 55,
+									6
+								)
+								.fillColor('#f9fafb')
+								.fill()
+						}
+
 						doc
 							.fillColor(colors.ink)
 							.fontSize(14)
 							.font('SpaceGrotesk')
-							.text(item.description || '-', 40, currentY, { width: 270 })
+							.text(item.description || '-', 52, currentY, {
+								width: 270,
+								lineGap: 4
+							})
 						doc
 							.fillColor(colors.muted)
 							.text((item.quantity || 0).toString(), 330, currentY, {
@@ -290,38 +314,38 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						doc
 							.fillColor(colors.ink)
 							.font('SpaceGrotesk-Bold')
-							.text(formatCurrency(item.amount || 0), 485, currentY, {
+							.text(formatCurrency(item.amount || 0), 473, currentY, {
 								width: 70,
 								align: 'right'
 							})
-						currentY += data.items.length > 8 ? 30 : 42
-						drawLine(currentY - 10, colors.tableLine)
+						currentY += data.items.length > 5 ? 45 : 55
+						drawLine(currentY - 15, colors.tableLine)
 					})
 
 					// 5. Summary
 					const summaryY = currentY + 30
 					doc
 						.fillColor(colors.muted)
-						.fontSize(12)
+						.fontSize(14)
 						.font('SpaceGrotesk')
 						.text('Subtotal', 40, summaryY)
 					doc
 						.fillColor(colors.ink)
 						.font('SpaceGrotesk-Bold')
 						.fontSize(14)
-						.text(formatCurrency(subtotal), 95, summaryY)
+						.text(formatCurrency(subtotal), 105, summaryY)
 
 					if ((data.tax || 0) > 0) {
 						doc
 							.fillColor(colors.muted)
-							.fontSize(12)
+							.fontSize(14)
 							.font('SpaceGrotesk')
 							.text(`Tax (${data.tax}%)`, 200, summaryY)
 						doc
 							.fillColor(colors.ink)
 							.font('SpaceGrotesk-Bold')
 							.fontSize(14)
-							.text(formatCurrency(taxAmount), 260, summaryY)
+							.text(formatCurrency(taxAmount), 265, summaryY)
 					}
 
 					const pillY = summaryY + 30
@@ -352,17 +376,19 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					// 6. Notes
 					if (data.notes) {
 						const notesY = Math.max(nextSummaryY + 20, pillY + 68)
-						doc.roundedRect(40, notesY, 515, 85, 14).fillColor('#fff7ed').fill()
 						doc
-							.fillColor('#9a3412')
+							.roundedRect(40, notesY, 515, 85, 12)
+							.fillAndStroke(previewColors.noteBg, previewColors.noteBorder)
+						doc
+							.fillColor(previewColors.noteText)
 							.fontSize(12)
 							.font('SpaceGrotesk-Bold')
 							.text('NOTES', 65, notesY + 18)
 						doc
-							.fillColor(colors.ink)
-							.fontSize(13)
+							.fillColor(previewColors.inkSoft)
+							.fontSize(14)
 							.font('SpaceGrotesk')
-							.text(data.notes, 65, notesY + 38, { width: 470 })
+							.text(data.notes, 65, notesY + 35, { width: 470 })
 					}
 					doc.end()
 
