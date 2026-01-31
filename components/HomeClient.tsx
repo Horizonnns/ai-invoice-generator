@@ -493,6 +493,9 @@ export default function HomeClient({ children }: HomeClientProps) {
 							<InvoicePreview
 								ref={previewRef}
 								data={invoiceData}
+								onLogoChange={logo =>
+									setInvoiceData(prev => ({ ...prev, logo }))
+								}
 							/>
 						</div>
 					</div>

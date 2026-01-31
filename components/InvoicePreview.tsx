@@ -8,11 +8,12 @@ import {
 	formatCurrency,
 	formatDate
 } from '@/utils/helpers'
-import { FileText } from 'lucide-react'
+import { FileText, Upload } from 'lucide-react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InvoicePreviewProps {
 	data: InvoiceData
+	onLogoChange?: (logo: string | undefined) => void
 }
 
 export interface InvoicePreviewRef {
@@ -61,8 +62,31 @@ const convertOklchToRgb = (element: HTMLElement) => {
 }
 
 const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
-	({ data }, ref) => {
+	({ data, onLogoChange }, ref) => {
 		const invoiceRef = useRef<HTMLDivElement>(null)
+		const fileInputRef = useRef<HTMLInputElement>(null)
+
+		const handleLogoClick = () => {
+			fileInputRef.current?.click()
+		}
+
+		const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0]
+			if (!file) return
+
+			if (file.size > 2 * 1024 * 1024) {
+				alert('Image size should be less than 2MB')
+				return
+			}
+
+			const reader = new FileReader()
+			reader.onloadend = () => {
+				const base64String = reader.result as string
+				onLogoChange?.(base64String)
+			}
+			reader.readAsDataURL(file)
+			event.target.value = ''
+		}
 
 		const subtotal = calculateSubtotal(data.items)
 		const taxAmount = calculateTax(subtotal, data.tax || 0)
@@ -137,62 +161,76 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					// 1. Header
 					const headerSize = 48
-					const logoGrad = doc.linearGradient(
-						40,
-						40,
-						40 + headerSize,
-						40 + headerSize
-					)
-					logoGrad.stop(0, '#0b1b2b').stop(1, '#1f3a5a')
 
-					doc.roundedRect(40, 40, headerSize, headerSize, 14).fill(logoGrad)
+					if (data.logo) {
+						doc.save()
+						doc.roundedRect(40, 40, headerSize, headerSize, 14).clip()
+						doc.image(data.logo, 40, 40, {
+							width: headerSize,
+							height: headerSize,
+							fit: [headerSize, headerSize],
+							align: 'center',
+							valign: 'center'
+						})
+						doc.restore()
+					} else {
+						const logoGrad = doc.linearGradient(
+							40,
+							40,
+							40 + headerSize,
+							40 + headerSize
+						)
+						logoGrad.stop(0, '#0b1b2b').stop(1, '#1f3a5a')
 
-					// Larger Document Icon (Lucide FileText style)
-					doc.save()
-					doc.translate(52, 51)
-					doc
-						.lineWidth(2)
-						.strokeColor(colors.white)
-						.lineJoin('round')
-						.lineCap('round')
+						doc.roundedRect(40, 40, headerSize, headerSize, 14).fill(logoGrad)
 
-					const w = 24
-					const h = 28
-					const f = 8
+						// Larger Document Icon (Lucide FileText style)
+						doc.save()
+						doc.translate(52, 51)
+						doc
+							.lineWidth(2)
+							.strokeColor(colors.white)
+							.lineJoin('round')
+							.lineCap('round')
 
-					doc
-						.moveTo(0, 2)
-						.quadraticCurveTo(0, 0, 2, 0)
-						.lineTo(w - f, 0)
-						.lineTo(w, f)
-						.lineTo(w, h - 2)
-						.quadraticCurveTo(w, h, w - 2, h)
-						.lineTo(2, h)
-						.quadraticCurveTo(0, h, 0, h - 2)
-						.closePath()
-						.stroke()
+						const w = 24
+						const h = 28
+						const f = 8
 
-					doc
-						.moveTo(w - f, 0)
-						.lineTo(w - f, f)
-						.lineTo(w, f)
-						.stroke()
+						doc
+							.moveTo(0, 2)
+							.quadraticCurveTo(0, 0, 2, 0)
+							.lineTo(w - f, 0)
+							.lineTo(w, f)
+							.lineTo(w, h - 2)
+							.quadraticCurveTo(w, h, w - 2, h)
+							.lineTo(2, h)
+							.quadraticCurveTo(0, h, 0, h - 2)
+							.closePath()
+							.stroke()
 
-					doc.lineWidth(1.5)
-					doc
-						.moveTo(6, 12)
-						.lineTo(w - 6, 12)
-						.stroke()
-					doc
-						.moveTo(6, 17)
-						.lineTo(w - 6, 17)
-						.stroke()
-					doc
-						.moveTo(6, 22)
-						.lineTo(w - 10, 22)
-						.stroke()
+						doc
+							.moveTo(w - f, 0)
+							.lineTo(w - f, f)
+							.lineTo(w, f)
+							.stroke()
 
-					doc.restore()
+						doc.lineWidth(1.5)
+						doc
+							.moveTo(6, 12)
+							.lineTo(w - 6, 12)
+							.stroke()
+						doc
+							.moveTo(6, 17)
+							.lineTo(w - 6, 17)
+							.stroke()
+						doc
+							.moveTo(6, 22)
+							.lineTo(w - 10, 22)
+							.stroke()
+
+						doc.restore()
+					}
 
 					doc
 						.fillColor(colors.ink)
@@ -450,8 +488,39 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							marginBottom: '20px'
 						}}
 					>
-						<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25'>
-							<FileText className='w-5 h-5 text-white' />
+						<div
+							onClick={handleLogoClick}
+							className='cursor-pointer group relative'
+							title='Click to upload logo'
+						>
+							<input
+								type='file'
+								ref={fileInputRef}
+								onChange={handleFileChange}
+								accept='image/*'
+								className='hidden'
+							/>
+							{data.logo ? (
+								<div className='relative overflow-hidden rounded-xl'>
+									<img
+										src={data.logo}
+										alt='Logo'
+										className='w-10 h-10 object-contain bg-white dark:bg-slate-800 shadow-md shadow-slate-900/10'
+									/>
+									<div className='absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200'>
+										<Upload className='w-4 h-4 text-white' />
+									</div>
+								</div>
+							) : (
+								<div className='relative'>
+									<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25 transition-all'>
+										<FileText className='w-5 h-5 text-white' />
+									</div>
+									<div className='absolute inset-0 flex items-center justify-center rounded-xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200'>
+										<Upload className='w-4 h-4 text-white' />
+									</div>
+								</div>
+							)}
 						</div>
 
 						<div>

@@ -22,6 +22,7 @@ export interface InvoiceData {
 	items: InvoiceItem[]
 	notes?: string
 	tax?: number
+	logo?: string
 }
 
 export interface ParsedInvoiceResponse {
