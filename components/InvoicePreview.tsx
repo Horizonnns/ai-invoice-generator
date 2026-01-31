@@ -198,18 +198,18 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						.fillColor(colors.ink)
 						.fontSize(26)
 						.font('SpaceGrotesk-Bold')
-						.text('INVOICE', 100, 48)
+						.text('INVOICE', 100, 42)
 					doc
 						.fillColor(colors.muted)
 						.fontSize(14)
 						.font('SpaceGrotesk')
-						.text(data.invoiceNumber || '-', 100, 75)
+						.text(data.invoiceNumber || '-', 100, 70)
 
 					// 2. Parties
 					const partyY = 125
 					doc
 						.fillColor(colors.muted)
-						.fontSize(10)
+						.fontSize(12)
 						.font('SpaceGrotesk-Bold')
 						.text('FROM', 40, partyY)
 						.text('BILL TO', 300, partyY)
@@ -217,14 +217,14 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					doc
 						.fillColor(colors.ink)
 						.font('SpaceGrotesk-Bold')
-						.fontSize(18)
+						.fontSize(20)
 						.text(data.sender.name || 'Your Business', 40, partyY + 15)
 
 					doc
-						.fontSize(16)
+						.fontSize(18)
 						.text(data.recipient.name || 'Client Name', 300, partyY + 15)
 
-					doc.fillColor(colors.muted).fontSize(12).font('SpaceGrotesk')
+					doc.fillColor(colors.muted).fontSize(14).font('SpaceGrotesk')
 
 					let currentPartyY = partyY + 40
 					doc.text(data.sender.email || '', 40, currentPartyY)
@@ -279,6 +279,12 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					let currentY = tableY + 45
 					data.items.forEach((item, index) => {
+						if (currentY > 750) {
+							doc.addPage()
+							currentY = 50
+							drawLine(currentY - 10)
+						}
+
 						// Zebra striping for even rows
 						if (index % 2 === 0) {
 							doc
@@ -323,7 +329,11 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					})
 
 					// 5. Summary
-					const summaryY = currentY + 30
+					if (currentY > 700) {
+						doc.addPage()
+						currentY = 50
+					}
+					const summaryY = currentY + 10
 					doc
 						.fillColor(colors.muted)
 						.fontSize(14)
@@ -375,7 +385,14 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					// 6. Notes
 					if (data.notes) {
-						const notesY = Math.max(nextSummaryY + 20, pillY + 68)
+						let notesY = Math.max(nextSummaryY + 20, pillY + 68)
+
+						// Check if notes fit, if not add page
+						if (notesY + 100 > 800) {
+							doc.addPage()
+							notesY = 50
+						}
+
 						doc
 							.roundedRect(40, notesY, 515, 85, 12)
 							.fillAndStroke(previewColors.noteBg, previewColors.noteBorder)
@@ -433,16 +450,8 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 							marginBottom: '20px'
 						}}
 					>
-						<div
-							style={{
-								padding: '8px',
-								background: 'linear-gradient(135deg, #0b1b2b 0%, #1f3a5a 100%)',
-								borderRadius: '10px'
-							}}
-						>
-							<FileText
-								style={{ width: '20px', height: '20px', color: '#ffffff' }}
-							/>
+						<div className='p-2 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 rounded-xl shadow-md shadow-slate-900/25'>
+							<FileText className='w-5 h-5 text-white' />
 						</div>
 
 						<div>
