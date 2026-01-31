@@ -471,7 +471,7 @@ export default function HomeClient({ children }: HomeClientProps) {
 								<button
 									onClick={handleDownload}
 									disabled={isDownloading}
-									className='flex items-center justify-center gap-2 h-9 rounded-lg px-4 bg-linear-to-br from-slate-900 via-slate-800 to-[#b08968] text-white text-[12px] font-medium shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 active:scale-[0.98] transition-all disabled:opacity-70'
+									className='flex items-center justify-center gap-2 h-9 rounded-lg px-4 bg-linear-to-br from-slate-900 via-slate-800 to-brass text-white text-[12px] font-medium shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 active:scale-[0.98] transition-all disabled:opacity-70'
 								>
 									{isDownloading ? (
 										<>

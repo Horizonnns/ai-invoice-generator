@@ -471,23 +471,15 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 			<div className='bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-black/40 overflow-hidden border border-slate-200/70 dark:border-slate-800/80 relative'>
 				<div
 					ref={invoiceRef}
+					className='p-6 bg-white'
 					style={{
-						padding: '24px',
-						backgroundColor: '#ffffff',
 						color: previewColors.inkSoft,
 						fontFamily:
 							'Space Grotesk, -apple-system, BlinkMacSystemFont, sans-serif'
 					}}
 				>
 					{/* Header */}
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							gap: '10px',
-							marginBottom: '20px'
-						}}
-					>
+					<div className='flex items-center gap-2.5 mb-5'>
 						<div
 							onClick={handleLogoClick}
 							className='cursor-pointer group relative'
@@ -524,155 +516,59 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						</div>
 
 						<div>
-							<h1
-								style={{
-									fontSize: '20px',
-									fontWeight: 'bold',
-									color: previewColors.ink,
-									margin: 0
-								}}
-							>
-								INVOICE
-							</h1>
+							<h1 className='text-[20px] font-bold text-ink m-0'>INVOICE</h1>
 
-							<p
-								style={{
-									fontSize: '12px',
-									color: previewColors.muted,
-									margin: 0
-								}}
-							>
+							<p className='text-[12px] text-[#6b7280] m-0'>
 								{data.invoiceNumber}
 							</p>
 						</div>
 					</div>
 
 					{/* Parties */}
-					<div
-						style={{
-							display: 'grid',
-							gridTemplateColumns: '1fr 1fr',
-							gap: '16px',
-							marginBottom: '20px'
-						}}
-					>
+					<div className='grid grid-cols-2 gap-4 mb-5'>
 						<div>
-							<p
-								style={{
-									fontSize: '10px',
-									fontWeight: '600',
-									color: previewColors.muted,
-									textTransform: 'uppercase',
-									letterSpacing: '0.05em',
-									marginBottom: '4px'
-								}}
-							>
+							<p className='text-[10px] font-semibold text-[#6b7280] uppercase tracking-[0.05em] mb-1'>
 								From
 							</p>
 
-							<p
-								style={{
-									fontWeight: '600',
-									color: previewColors.ink,
-									fontSize: '18px',
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='font-semibold text-ink text-[18px] mb-0.5 wrap-break-word'>
 								{data.sender.name || 'Your Business'}
 							</p>
 
-							<p
-								style={{
-									fontSize: '14px',
-									color: previewColors.muted,
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='text-[14px] text-[#6b7280] mb-0.5 wrap-break-word'>
 								{data.sender.email}
 							</p>
 
-							<p
-								style={{
-									fontSize: '14px',
-									color: previewColors.muted,
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='text-[14px] text-[#6b7280] mb-0.5 wrap-break-word'>
 								{data.sender.address}
 							</p>
 
 							{data.sender.phone && (
-								<p
-									style={{
-										fontSize: '14px',
-										color: previewColors.muted,
-										margin: 0
-									}}
-								>
+								<p className='text-[14px] text-[#6b7280] m-0'>
 									{data.sender.phone}
 								</p>
 							)}
 						</div>
 
 						<div>
-							<p
-								style={{
-									fontSize: '10px',
-									fontWeight: '600',
-									color: previewColors.muted,
-									textTransform: 'uppercase',
-									letterSpacing: '0.05em',
-									marginBottom: '4px'
-								}}
-							>
+							<p className='text-[10px] font-semibold text-[#6b7280] uppercase tracking-[0.05em] mb-1'>
 								Bill To
 							</p>
 
-							<p
-								style={{
-									fontWeight: '600',
-									color: previewColors.ink,
-									fontSize: '16px',
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='font-semibold text-ink text-[16px] mb-0.5 wrap-break-word'>
 								{data.recipient.name || 'Client Name'}
 							</p>
 
-							<p
-								style={{
-									fontSize: '14px',
-									color: previewColors.muted,
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='text-[14px] text-[#6b7280] mb-0.5 wrap-break-word'>
 								{data.recipient.email}
 							</p>
 
-							<p
-								style={{
-									fontSize: '14px',
-									color: previewColors.muted,
-									margin: '0 0 2px 0',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='text-[14px] text-[#6b7280] mb-0.5 wrap-break-word'>
 								{data.recipient.address}
 							</p>
 
 							{data.recipient.phone && (
-								<p
-									style={{
-										fontSize: '14px',
-										color: previewColors.muted,
-										margin: 0
-									}}
-								>
+								<p className='text-[14px] text-[#6b7280] m-0'>
 									{data.recipient.phone}
 								</p>
 							)}
@@ -680,63 +576,23 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					</div>
 
 					{/* Dates */}
-					<div
-						style={{
-							display: 'flex',
-							gap: '32px',
-							marginBottom: '20px',
-							padding: '12px 16px',
-							backgroundColor: previewColors.surface,
-							borderRadius: '10px',
-							border: `1px solid ${previewColors.line}`
-						}}
-					>
+					<div className='flex gap-8 mb-5 px-4 py-3 rounded-[10px] border bg-paper border-[#e9d7c2]'>
 						<div>
-							<p
-								style={{
-									fontSize: '10px',
-									fontWeight: '600',
-									color: previewColors.muted,
-									textTransform: 'uppercase',
-									margin: '0 0 2px 0'
-								}}
-							>
+							<p className='text-[10px] font-semibold text-[#6b7280] uppercase m-0 mb-0.5'>
 								Issue Date
 							</p>
 
-							<p
-								style={{
-									fontWeight: '500',
-									color: previewColors.ink,
-									fontSize: '14px',
-									margin: 0
-								}}
-							>
+							<p className='font-medium text-ink text-[14px] m-0'>
 								{data.issueDate ? formatDate(data.issueDate) : '-'}
 							</p>
 						</div>
 
 						<div>
-							<p
-								style={{
-									fontSize: '10px',
-									fontWeight: '600',
-									color: previewColors.muted,
-									textTransform: 'uppercase',
-									margin: '0 0 2px 0'
-								}}
-							>
+							<p className='text-[10px] font-semibold text-[#6b7280] uppercase m-0 mb-0.5'>
 								Due Date
 							</p>
 
-							<p
-								style={{
-									fontWeight: '500',
-									color: previewColors.ink,
-									fontSize: '14px',
-									margin: 0
-								}}
-							>
+							<p className='font-medium text-ink text-[14px] m-0'>
 								{data.dueDate ? formatDate(data.dueDate) : '-'}
 							</p>
 						</div>
@@ -744,90 +600,28 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					{/* Items Table */}
 					<div
-						className={data.items.length > 4 ? 'custom-scrollbar pr-1' : ''}
-						style={{
-							marginBottom: '20px',
-							maxHeight: data.items.length > 4 ? '230px' : undefined,
-							overflowY: data.items.length > 4 ? 'auto' : undefined
-						}}
+						className={`mb-5 ${
+							data.items.length > 4
+								? 'custom-scrollbar pr-1 max-h-[230px] overflow-y-auto'
+								: ''
+						}`}
 					>
-						<table
-							style={{
-								width: '100%',
-								fontSize: '12px',
-								borderCollapse: 'collapse'
-							}}
-						>
+						<table className='w-full text-[12px] border-collapse'>
 							<thead>
-								<tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-									<th
-										style={{
-											position: 'sticky',
-											top: 0,
-											backgroundColor: '#ffffff',
-											zIndex: 10,
-											textAlign: 'left',
-											padding: '8px 0 8px 12px',
-											fontSize: '10px',
-											fontWeight: '600',
-											color: previewColors.muted,
-											textTransform: 'uppercase'
-										}}
-									>
+								<tr className='border-b-2 border-[#e5e7eb]'>
+									<th className='sticky top-0 bg-white z-10 text-left py-2 pl-3 text-[10px] font-semibold text-[#6b7280] uppercase'>
 										Description
 									</th>
 
-									<th
-										style={{
-											position: 'sticky',
-											top: 0,
-											backgroundColor: '#ffffff',
-											zIndex: 10,
-											textAlign: 'center',
-											padding: '8px 0',
-											width: '60px',
-											fontSize: '10px',
-											fontWeight: '600',
-											color: previewColors.muted,
-											textTransform: 'uppercase'
-										}}
-									>
+									<th className='sticky top-0 bg-white z-10 text-center py-2 w-[60px] text-[10px] font-semibold text-[#6b7280] uppercase'>
 										Qty
 									</th>
 
-									<th
-										style={{
-											position: 'sticky',
-											top: 0,
-											backgroundColor: '#ffffff',
-											zIndex: 10,
-											textAlign: 'right',
-											padding: '8px 0',
-											width: '80px',
-											fontSize: '10px',
-											fontWeight: '600',
-											color: previewColors.muted,
-											textTransform: 'uppercase'
-										}}
-									>
+									<th className='sticky top-0 bg-white z-10 text-right py-2 w-[80px] text-[10px] font-semibold text-[#6b7280] uppercase'>
 										Rate
 									</th>
 
-									<th
-										style={{
-											position: 'sticky',
-											top: 0,
-											backgroundColor: '#ffffff',
-											zIndex: 10,
-											textAlign: 'right',
-											padding: '8px 12px 8px 0',
-											width: '90px',
-											fontSize: '10px',
-											fontWeight: '600',
-											color: previewColors.muted,
-											textTransform: 'uppercase'
-										}}
-									>
+									<th className='sticky top-0 bg-white z-10 text-right py-2 pr-3 w-[90px] text-[10px] font-semibold text-[#6b7280] uppercase'>
 										Amount
 									</th>
 								</tr>
@@ -837,48 +631,21 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 								{data.items.map((item, index) => (
 									<tr
 										key={item.id}
-										style={{
-											backgroundColor: index % 2 === 0 ? '#f9fafb' : '#ffffff'
-										}}
+										className={index % 2 === 0 ? 'bg-[#f9fafb]' : 'bg-white'}
 									>
-										<td
-											style={{
-												padding: '10px 8px 10px 12px',
-												color: previewColors.ink,
-												wordBreak: 'break-word'
-											}}
-										>
+										<td className='py-2.5 pl-3 pr-2 text-ink wrap-break-word'>
 											{item.description || '-'}
 										</td>
 
-										<td
-											style={{
-												padding: '10px 0',
-												textAlign: 'center',
-												color: previewColors.muted
-											}}
-										>
+										<td className='py-2.5 text-center text-[#6b7280]'>
 											{item.quantity ?? 0}
 										</td>
 
-										<td
-											style={{
-												padding: '10px 0',
-												textAlign: 'right',
-												color: previewColors.muted
-											}}
-										>
+										<td className='py-2.5 text-right text-[#6b7280]'>
 											{formatCurrency(item.rate ?? 0)}
 										</td>
 
-										<td
-											style={{
-												padding: '10px 12px 10px 0',
-												textAlign: 'right',
-												fontWeight: '500',
-												color: previewColors.ink
-											}}
-										>
+										<td className='py-2.5 pr-3 text-right font-medium text-ink'>
 											{formatCurrency(item.amount)}
 										</td>
 									</tr>
@@ -888,42 +655,21 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 					</div>
 
 					{/* Totals */}
-					<div style={{ marginBottom: '20px' }}>
+					<div className='mb-5'>
 						{/* Subtotal and Tax row */}
-						<div
-							style={{
-								display: 'flex',
-								gap: '32px',
-								marginBottom: '12px',
-								fontSize: '13px'
-							}}
-						>
-							<div
-								style={{
-									display: 'flex',
-									gap: '8px',
-									alignItems: 'baseline'
-								}}
-							>
-								<span style={{ color: previewColors.muted }}>Subtotal</span>
-								<span style={{ fontWeight: '600', color: previewColors.ink }}>
+						<div className='flex gap-8 mb-3 text-[13px]'>
+							<div className='flex gap-2 items-baseline'>
+								<span className='text-[#6b7280]'>Subtotal</span>
+								<span className='font-semibold text-ink'>
 									{formatCurrency(subtotal)}
 								</span>
 							</div>
 
 							{(data.tax || 0) > 0 && (
-								<div
-									style={{
-										display: 'flex',
-										gap: '8px',
-										alignItems: 'baseline'
-									}}
-								>
-									<span style={{ color: previewColors.muted }}>
-										Tax ({data.tax}%)
-									</span>
+								<div className='flex gap-2 items-baseline'>
+									<span className='text-[#6b7280]'>Tax ({data.tax}%)</span>
 
-									<span style={{ fontWeight: '600', color: previewColors.ink }}>
+									<span className='font-semibold text-ink'>
 										{formatCurrency(taxAmount)}
 									</span>
 								</div>
@@ -931,20 +677,9 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 						</div>
 
 						{/* Total Pill - Wide */}
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'space-between',
-								padding: '8px 16px',
-								borderRadius: '12px',
-								color: '#ffffff',
-								background: `linear-gradient(90deg, ${previewColors.ink} 0%, #1e3550 55%, #b08968 100%)`,
-								boxShadow: '0 4px 12px rgba(11, 27, 43, 0.15)'
-							}}
-						>
-							<span style={{ fontWeight: '600', fontSize: '15px' }}>Total</span>
-							<span style={{ fontWeight: 'bold', fontSize: '15px' }}>
+						<div className='flex items-center justify-between px-4 py-2 rounded-xl text-white shadow-[0_4px_12px_rgba(11,27,43,0.15)] bg-[linear-gradient(90deg,#0b1b2b_0%,#1e3550_55%,#b08968_100%)]'>
+							<span className='font-semibold text-[15px]'>Total</span>
+							<span className='font-bold text-[15px]'>
 								{formatCurrency(total)}
 							</span>
 						</div>
@@ -952,34 +687,12 @@ const InvoicePreview = forwardRef<InvoicePreviewRef, InvoicePreviewProps>(
 
 					{/* Notes */}
 					{data.notes && (
-						<div
-							style={{
-								padding: '12px 16px',
-								backgroundColor: previewColors.noteBg,
-								border: `1px solid ${previewColors.noteBorder}`,
-								borderRadius: '10px'
-							}}
-						>
-							<p
-								style={{
-									fontSize: '10px',
-									fontWeight: '600',
-									color: previewColors.noteText,
-									textTransform: 'uppercase',
-									margin: '0 0 4px 0'
-								}}
-							>
+						<div className='px-4 py-3 bg-[#fff3e2] border border-[#f2d4b0] rounded-[10px]'>
+							<p className='text-[10px] font-semibold text-brass uppercase m-0 mb-1'>
 								Notes
 							</p>
 
-							<p
-								style={{
-									margin: 0,
-									color: previewColors.inkSoft,
-									fontSize: '12px',
-									wordBreak: 'break-word'
-								}}
-							>
+							<p className='m-0 text-ink-soft text-[12px] wrap-break-word'>
 								{data.notes}
 							</p>
 						</div>

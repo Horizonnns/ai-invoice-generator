@@ -55,12 +55,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 
 	const modalContent = isOpen ? (
 		<div
-			className='fixed inset-0 z-100 flex items-center justify-center p-4'
-			style={{
-				backgroundColor: 'rgba(0, 0, 0, 0.5)',
-				backdropFilter: 'blur(10px)',
-				WebkitBackdropFilter: 'blur(10px)'
-			}}
+			className='fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm'
 			onClick={e => e.target === e.currentTarget && setIsOpen(false)}
 		>
 			<div className='bg-white dark:bg-[#111111] rounded-[20px] shadow-[0_0_50px_rgba(0,0,0,0.3)] w-full max-w-xl overflow-hidden border border-slate-200 dark:border-white/5 animate-in fade-in zoom-in duration-300'>
