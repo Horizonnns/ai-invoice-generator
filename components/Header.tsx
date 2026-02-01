@@ -75,34 +75,39 @@ export default function Header({
 							<MagicFill onFill={onMagicFill} />
 
 							{/* Desktop Controls */}
-							<div className='hidden sm:flex items-center gap-2.5'>
+							<div className='hidden sm:flex items-center gap-2'>
 								<button
 									onClick={() => setIsSupportOpen(true)}
-									className='icon-button'
-									aria-label='Support'
+									className='h-9 px-3 flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm active:scale-95'
 									title='Support'
 								>
-									<HelpCircle className='relative h-4 w-4' />
+									<HelpCircle className='w-3.5 h-3.5' />
+									<span className='hidden md:inline'>Support</span>
 								</button>
-								<ThemeToggle />
+
 								<Link
 									href='/history'
-									className='icon-button'
-									aria-label='History'
+									className='relative h-9 px-3 flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm active:scale-95 group'
 									title='History'
 								>
-									<Clock className='relative h-4 w-4' />
+									<Clock className='w-3.5 h-3.5' />
+									<span className='hidden md:inline'>History</span>
 									{user && draftCount > 0 && (
-										<span className='absolute -top-1.5 -right-1.5 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-slate-900 animate-in zoom-in duration-300'>
+										<span className='absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 rounded-full bg-rose-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-slate-900 shadow-sm animate-in zoom-in duration-300'>
 											{draftCount}
 										</span>
 									)}
 								</Link>
-								<AuthControls
-									user={user}
-									onAuth={onAuth}
-									apiBaseUrl={apiBaseUrl}
-								/>
+
+								<div className='flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800 ml-1'>
+									<ThemeToggle />
+
+									<AuthControls
+										user={user}
+										onAuth={onAuth}
+										apiBaseUrl={apiBaseUrl}
+									/>
+								</div>
 							</div>
 
 							{/* Mobile Menu Button */}
