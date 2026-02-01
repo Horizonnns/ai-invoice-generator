@@ -127,9 +127,11 @@ export default function AuthControls({
 				<>
 					<button
 						onClick={handleLogout}
-						className='icon-button'
+						className='group relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/20 bg-white/70 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-200'
+						title='Log out'
 					>
-						<LogOut className='w-3.5 h-3.5' />
+						<span className='absolute inset-0 rounded-lg bg-linear-gradient-to-br from-white/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100 dark:from-slate-700/40' />
+						<LogOut className='relative w-4 h-4' />
 					</button>
 
 					<div className='flex items-center gap-2 text-xs text-gray-600 dark:text-slate-300'>
