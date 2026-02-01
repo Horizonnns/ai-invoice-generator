@@ -99,8 +99,8 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 				</div>
 
 				{/* Toolbar: Clean & Utility focused */}
-				<div className='px-6 py-4 bg-slate-50 dark:bg-white/5 flex items-center justify-between border-t border-slate-100 dark:border-white/5'>
-					<div className='flex items-center gap-4'>
+				<div className='px-4 py-3 sm:px-6 sm:py-4 bg-slate-50 dark:bg-white/5 flex items-center justify-between border-t border-slate-100 dark:border-white/5'>
+					<div className='flex items-center gap-2 sm:gap-4'>
 						<div className='flex items-center'>
 							<VoiceInput
 								onTranscript={t => setText(t)}
@@ -108,7 +108,7 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 							/>
 						</div>
 
-						<div className='group relative'>
+						<div className='group relative hidden sm:block'>
 							<HelpCircle className='w-4 h-4 text-slate-300 cursor-help hover:text-slate-500 transition-colors' />
 							<div className='absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900 text-[10px] text-white rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity'>
 								Mention: Business name, client name, services, rates and totals.
@@ -116,10 +116,10 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 						</div>
 					</div>
 
-					<div className='flex items-center gap-3'>
+					<div className='flex items-center gap-2 sm:gap-3'>
 						<button
 							onClick={() => setIsOpen(false)}
-							className='text-xs font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors px-4'
+							className='text-xs font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors px-2 sm:px-4'
 							disabled={isLoading}
 						>
 							Cancel
@@ -127,15 +127,15 @@ const MagicFill: React.FC<MagicFillProps> = ({ onFill }) => {
 						<button
 							onClick={handleSubmit}
 							disabled={isLoading || !text.trim()}
-							className='h-11 px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold rounded-xl flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md shadow-slate-900/10 dark:shadow-none'
+							className='h-9 sm:h-11 px-4 sm:px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold text-sm sm:text-base rounded-lg sm:rounded-xl flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md shadow-slate-900/10 dark:shadow-none'
 						>
 							{isLoading ? (
-								<Loader2 className='w-4 h-4 animate-spin' />
+								<Loader2 className='w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin' />
 							) : (
 								(
 									<>
 										<span>Process</span>
-										<CornerDownLeft className='w-3.5 h-3.5 opacity-50' />
+										<CornerDownLeft className='w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-50' />
 									</>
 								) || 'Process Draft'
 							)}

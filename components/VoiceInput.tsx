@@ -168,14 +168,14 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onTranscript, disabled }) => {
 				)}
 			</button>
 
-			{isListening && (
+			{/* {isListening && (
 				<button
 					onClick={stopListening}
 					className='text-[10px] h-7 px-2 font-bold text-slate-400 hover:text-rose-500 transition-colors bg-slate-100 dark:bg-white/5 rounded-md'
 				>
 					Done
 				</button>
-			)}
+			)} */}
 		</div>
 	)
 }
