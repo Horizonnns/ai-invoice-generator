@@ -1,12 +1,13 @@
 'use client'
 
 import type { InvoiceRecord } from '@/types/invoice'
-import { Clock, Download, Trash2 } from 'lucide-react'
+import { Clock, Download, Eye, Trash2 } from 'lucide-react'
 
 type InvoiceHistoryProps = {
 	invoices: InvoiceRecord[]
 	onLoad: (invoice: InvoiceRecord) => void
 	onDelete: (id: string) => void
+	onPreview: (invoice: InvoiceRecord) => void
 }
 
 const formatDate = (value: number) =>
@@ -20,7 +21,8 @@ const formatDate = (value: number) =>
 export default function InvoiceHistory({
 	invoices,
 	onLoad,
-	onDelete
+	onDelete,
+	onPreview
 }: InvoiceHistoryProps) {
 	if (invoices.length === 0) {
 		return (
@@ -73,6 +75,14 @@ export default function InvoiceHistory({
 						>
 							<Download className='w-3.5 h-3.5' />
 							Load
+						</button>
+
+						<button
+							onClick={() => onPreview(invoice)}
+							className='h-9 w-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all'
+							title='Quick Preview'
+						>
+							<Eye className='w-4 h-4' />
 						</button>
 
 						<button

@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header'
 import InvoiceHistory from '@/components/InvoiceHistory'
+import InvoicePreview from '@/components/InvoicePreview'
 import type {
 	AuthUser,
 	InvoiceData,
@@ -15,8 +16,9 @@ import {
 	getDefaultDueDate,
 	getTodayDate
 } from '@/utils/helpers'
-import { Trash2 } from 'lucide-react'
+import { Trash2, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 export default function HistoryPageClient() {
 	const apiBaseUrl = process.env.NEXT_PUBLIC_URL
@@ -24,6 +26,9 @@ export default function HistoryPageClient() {
 	const [history, setHistory] = useState<InvoiceRecord[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [showSuccess, setShowSuccess] = useState(false)
+	const [previewInvoice, setPreviewInvoice] = useState<InvoiceRecord | null>(
+		null
+	)
 
 	useEffect(() => {
 		const loadSession = async () => {
@@ -182,6 +187,7 @@ export default function HistoryPageClient() {
 						invoices={history}
 						onLoad={handleLoadInvoice}
 						onDelete={handleDeleteInvoice}
+						onPreview={setPreviewInvoice}
 					/>
 				) : (
 					<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
@@ -189,6 +195,47 @@ export default function HistoryPageClient() {
 					</div>
 				)}
 			</div>
+
+			{previewInvoice &&
+				createPortal(
+					<div
+						className='fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200'
+						onClick={() => setPreviewInvoice(null)}
+					>
+						<div
+							className='relative bg-white dark:bg-slate-900 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800'
+							onClick={e => e.stopPropagation()}
+						>
+							{/* Header */}
+							<div className='flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 z-10'>
+								<div className='flex items-center gap-3'>
+									<h3 className='font-bold text-lg text-slate-900 dark:text-white font-display'>
+										Invoice Preview
+									</h3>
+									<span className='px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] uppercase font-bold text-slate-500 tracking-wider'>
+										{previewInvoice.data.invoiceNumber || 'Untitled'}
+									</span>
+								</div>
+								<button
+									onClick={() => setPreviewInvoice(null)}
+									className='p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors'
+								>
+									<X className='w-5 h-5 text-slate-400 hover:text-slate-600 dark:hover:text-white' />
+								</button>
+							</div>
+
+							{/* Content */}
+							<div className='flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-950/50 flex justify-center'>
+								<div className='w-full max-w-[210mm] relative'>
+									<div className='origin-top scale-[0.85] sm:scale-100 transition-transform'>
+										<InvoicePreview data={previewInvoice.data} />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>,
+					document.body
+				)}
 		</div>
 	)
 }
