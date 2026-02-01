@@ -345,7 +345,7 @@ export default function HistoryPageClient() {
 						onClick={() => setPreviewInvoice(null)}
 					>
 						<div
-							className='relative bg-white dark:bg-slate-900 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800'
+							className='relative top-8 bg-white dark:bg-slate-900 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800'
 							onClick={e => e.stopPropagation()}
 						>
 							{/* Header */}
