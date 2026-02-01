@@ -21,7 +21,7 @@ import {
 	getTodayDate
 } from '@/utils/helpers'
 import { Search, Trash2, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 export default function HistoryPageClient() {
@@ -147,6 +147,75 @@ export default function HistoryPageClient() {
 		window.location.href = '/'
 	}
 
+	const [downloadingInvoice, setDownloadingInvoice] =
+		useState<InvoiceData | null>(null)
+	const downloadRef = useRef<any>(null)
+
+	const handleDuplicateInvoice = async (invoice: InvoiceRecord) => {
+		try {
+			const newNumber = generateInvoiceNumber()
+			const newInvoiceData: InvoiceData = {
+				...invoice.data,
+				invoiceNumber: newNumber,
+				issueDate: getTodayDate(),
+				dueDate: getDefaultDueDate()
+			}
+
+			const res = await fetch(`${apiBaseUrl}/api/invoices`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					status: 'draft',
+					data: newInvoiceData
+				}),
+				credentials: 'include'
+			})
+
+			if (!res.ok) throw new Error('Failed to duplicate invoice')
+
+			// Reload history
+			const listRes = await fetch(`${apiBaseUrl}/api/invoices`, {
+				credentials: 'include'
+			})
+			if (listRes.ok) {
+				const data = await listRes.json()
+				setHistory(data.invoices)
+			}
+		} catch (err) {
+			console.error(err)
+			setError('Failed to duplicate invoice')
+		}
+	}
+
+	const handleDownloadInvoice = (invoice: InvoiceRecord) => {
+		setDownloadingInvoice(invoice.data)
+	}
+
+	useEffect(() => {
+		if (!downloadingInvoice) return
+
+		const interval = setInterval(() => {
+			if (downloadRef.current) {
+				clearInterval(interval)
+
+				setTimeout(() => {
+					downloadRef.current
+						?.downloadPDF()
+						.then(() => {
+							setDownloadingInvoice(null)
+						})
+						.catch((err: any) => {
+							setDownloadingInvoice(null)
+						})
+				}, 500)
+			} else {
+				console.log('Waiting for preview ref...')
+			}
+		}, 200)
+
+		return () => clearInterval(interval)
+	}, [downloadingInvoice])
+
 	const stats = useMemo(() => {
 		const totalVolume = history.reduce((sum, inv) => {
 			const subtotal = calculateSubtotal(inv.data.items || [])
@@ -259,6 +328,8 @@ export default function HistoryPageClient() {
 						onLoad={handleLoadInvoice}
 						onDelete={handleDeleteInvoice}
 						onPreview={setPreviewInvoice}
+						onDuplicate={handleDuplicateInvoice}
+						onDownload={handleDownloadInvoice}
 					/>
 				) : (
 					<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
@@ -307,6 +378,15 @@ export default function HistoryPageClient() {
 					</div>,
 					document.body
 				)}
+			{/* Hidden Preview for Download (must be present in DOM) */}
+			{downloadingInvoice && (
+				<div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+					<InvoicePreview
+						data={downloadingInvoice}
+						ref={downloadRef}
+					/>
+				</div>
+			)}
 		</div>
 	)
 }

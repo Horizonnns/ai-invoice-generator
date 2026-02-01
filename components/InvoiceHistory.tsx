@@ -9,9 +9,11 @@ import {
 } from '@/utils/helpers'
 import {
 	Clock,
-	Download,
+	Copy,
+	DownloadCloud,
 	Eye,
 	FileText,
+	PenLine,
 	Trash2,
 	User,
 	Wallet
@@ -22,6 +24,8 @@ type InvoiceHistoryProps = {
 	onLoad: (invoice: InvoiceRecord) => void
 	onDelete: (id: string) => void
 	onPreview: (invoice: InvoiceRecord) => void
+	onDuplicate: (invoice: InvoiceRecord) => void
+	onDownload: (invoice: InvoiceRecord) => void
 }
 
 const formatDate = (value: number) =>
@@ -36,7 +40,9 @@ export default function InvoiceHistory({
 	invoices,
 	onLoad,
 	onDelete,
-	onPreview
+	onPreview,
+	onDuplicate,
+	onDownload
 }: InvoiceHistoryProps) {
 	if (invoices.length === 0) {
 		return (
@@ -114,8 +120,24 @@ export default function InvoiceHistory({
 							onClick={() => onLoad(invoice)}
 							className='flex-1 flex justify-center items-center gap-2 text-xs h-9 rounded-lg bg-linear-to-br from-slate-900 via-slate-800 to-brass text-white shadow-md shadow-slate-900/20 hover:shadow-lg hover:shadow-slate-900/30 active:scale-[0.98] transition-all font-medium'
 						>
-							<Download className='w-3.5 h-3.5' />
-							Load
+							<PenLine className='w-3.5 h-3.5' />
+							Edit
+						</button>
+
+						<button
+							onClick={() => onDownload(invoice)}
+							className='h-9 w-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all'
+							title='Download PDF'
+						>
+							<DownloadCloud className='w-4 h-4' />
+						</button>
+
+						<button
+							onClick={() => onDuplicate(invoice)}
+							className='h-9 w-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all'
+							title='Duplicate'
+						>
+							<Copy className='w-4 h-4' />
 						</button>
 
 						<button
