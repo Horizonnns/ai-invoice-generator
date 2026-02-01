@@ -1,10 +1,21 @@
 'use client'
 
-import AuthControls from '@/components/AuthControls'
+import Header from '@/components/Header'
 import InvoiceHistory from '@/components/InvoiceHistory'
-import type { AuthUser, InvoiceRecord } from '@/types/invoice'
-import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import type {
+	AuthUser,
+	InvoiceData,
+	InvoiceRecord,
+	ParsedInvoiceResponse
+} from '@/types/invoice'
+import {
+	calculateItemAmount,
+	createEmptyItem,
+	generateInvoiceNumber,
+	getDefaultDueDate,
+	getTodayDate
+} from '@/utils/helpers'
+import { Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function HistoryPageClient() {
@@ -12,6 +23,7 @@ export default function HistoryPageClient() {
 	const [user, setUser] = useState<AuthUser | null>(null)
 	const [history, setHistory] = useState<InvoiceRecord[]>([])
 	const [error, setError] = useState<string | null>(null)
+	const [showSuccess, setShowSuccess] = useState(false)
 
 	useEffect(() => {
 		const loadSession = async () => {
@@ -69,52 +81,114 @@ export default function HistoryPageClient() {
 				throw new Error('Failed to delete invoice')
 			}
 			setHistory(prev => prev.filter(item => item.id !== id))
+			setShowSuccess(true)
+			setTimeout(() => setShowSuccess(false), 3000)
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to delete invoice')
 		}
 	}
 
+	const handleMagicFill = (parsedData: ParsedInvoiceResponse) => {
+		const updatedData: InvoiceData = {
+			invoiceNumber: generateInvoiceNumber(),
+			issueDate: getTodayDate(),
+			dueDate: getDefaultDueDate(),
+			sender: { name: '', email: '', address: '', phone: '' },
+			recipient: { name: '', email: '', address: '', phone: '' },
+			items: [createEmptyItem()],
+			notes: '',
+			tax: undefined
+		}
+
+		if (parsedData.sender) {
+			updatedData.sender = { ...updatedData.sender, ...parsedData.sender }
+		}
+
+		if (parsedData.recipient) {
+			updatedData.recipient = {
+				...updatedData.recipient,
+				...parsedData.recipient
+			}
+		}
+
+		if (parsedData.items && parsedData.items.length > 0) {
+			updatedData.items = parsedData.items.map(item => ({
+				id: Math.random().toString(36).substring(2, 11),
+				description: item.description,
+				quantity: item.quantity,
+				rate: item.rate,
+				amount: calculateItemAmount(item.quantity, item.rate)
+			}))
+		}
+
+		if (parsedData.issueDate) {
+			updatedData.issueDate = parsedData.issueDate
+		}
+
+		if (parsedData.dueDate) {
+			updatedData.dueDate = parsedData.dueDate
+		}
+
+		if (parsedData.notes) {
+			updatedData.notes = parsedData.notes
+		}
+
+		window.localStorage.setItem('invoiceDraft', JSON.stringify(updatedData))
+		window.location.href = '/'
+	}
+
+	const draftCount = history.filter(inv => inv.status === 'draft').length
+
 	return (
-		<div className='mx-auto max-w-5xl px-4 sm:px-6 py-10'>
-			<div className='flex items-center justify-between gap-4 mb-8'>
-				<div className='flex items-center gap-3'>
-					<Link
-						href='/'
-						className='icon-button'
-						aria-label='Back to editor'
-						title='Back to editor'
-					>
-						<ArrowLeft className='h-4 w-4' />
-					</Link>
-					<div>
-						<h1 className='text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 font-display'>
-							History
-						</h1>
-						<p className='hidden sm:block text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
-							Drafts and recent invoices
+		<div className='min-h-screen'>
+			{/* Success Notification */}
+			{showSuccess && (
+				<div className='fixed top-20 right-4 z-50 animate-fade-in'>
+					<div className='flex items-center gap-3 rounded-xl dark:bg-slate-900 px-4 py-3 dark:text-white shadow-2xl shadow-slate-900/40 bg-slate-100 text-slate-900'>
+						<div className='flex h-6 w-6 items-center justify-center rounded-full bg-rose-500'>
+							<Trash2 className='h-3.5 w-3.5 text-white' />
+						</div>
+
+						<p className='font-semibold text-[10px] uppercase tracking-wider'>
+							Draft deleted
 						</p>
 					</div>
 				</div>
-				<AuthControls
-					user={user}
-					onAuth={setUser}
-					apiBaseUrl={apiBaseUrl}
-				/>
-			</div>
-
-			{error ? <div className='mb-3 text-xs text-red-500'>{error}</div> : null}
-
-			{user ? (
-				<InvoiceHistory
-					invoices={history}
-					onLoad={handleLoadInvoice}
-					onDelete={handleDeleteInvoice}
-				/>
-			) : (
-				<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
-					Sign in to view your invoice history.
-				</div>
 			)}
+			<Header
+				user={user}
+				onAuth={setUser}
+				draftCount={draftCount}
+				onMagicFill={handleMagicFill}
+				apiBaseUrl={apiBaseUrl}
+			/>
+
+			<div className='mx-auto max-w-7xl px-4 sm:px-6 py-10'>
+				<div className='mb-8'>
+					<h1 className='text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-100 font-display'>
+						History
+					</h1>
+					<p className='text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
+						Drafts and recent invoices
+					</p>
+				</div>
+
+				{error ? (
+					<div className='mb-3 text-xs text-red-500'>{error}</div>
+				) : null}
+
+				{user ? (
+					<InvoiceHistory
+						invoices={history}
+						onLoad={handleLoadInvoice}
+						onDelete={handleDeleteInvoice}
+					/>
+				) : (
+					<div className='card p-4 text-xs text-slate-500 dark:text-slate-400'>
+						Sign in to view your invoice history.
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }
