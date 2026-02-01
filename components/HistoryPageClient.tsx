@@ -11,13 +11,17 @@ import type {
 } from '@/types/invoice'
 import {
 	calculateItemAmount,
+	calculateSubtotal,
+	calculateTax,
+	calculateTotal,
 	createEmptyItem,
+	formatCurrency,
 	generateInvoiceNumber,
 	getDefaultDueDate,
 	getTodayDate
 } from '@/utils/helpers'
 import { Search, Trash2, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 export default function HistoryPageClient() {
@@ -143,7 +147,21 @@ export default function HistoryPageClient() {
 		window.location.href = '/'
 	}
 
-	const draftCount = history.filter(inv => inv.status === 'draft').length
+	const stats = useMemo(() => {
+		const totalVolume = history.reduce((sum, inv) => {
+			const subtotal = calculateSubtotal(inv.data.items || [])
+			const tax = inv.data.tax ? calculateTax(subtotal, inv.data.tax) : 0
+			return sum + calculateTotal(subtotal, tax)
+		}, 0)
+
+		return {
+			total: history.length,
+			volume: totalVolume,
+			drafts: history.filter(inv => inv.status === 'draft').length
+		}
+	}, [history])
+
+	const draftCount = stats.drafts
 
 	return (
 		<div className='min-h-screen'>
@@ -177,6 +195,35 @@ export default function HistoryPageClient() {
 					<p className='text-xs text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]'>
 						Drafts and recent invoices
 					</p>
+				</div>
+
+				<div className='grid grid-cols-2 md:grid-cols-3 gap-4 mb-8'>
+					<div className='p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800'>
+						<div className='text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1'>
+							Total Invoices
+						</div>
+						<div className='text-2xl font-bold text-slate-900 dark:text-white font-display'>
+							{stats.total}
+						</div>
+					</div>
+
+					<div className='p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800'>
+						<div className='text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1'>
+							Total Volume
+						</div>
+						<div className='text-2xl font-bold text-slate-900 dark:text-white font-display'>
+							{formatCurrency(stats.volume)}
+						</div>
+					</div>
+
+					<div className='p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 col-span-2 md:col-span-1'>
+						<div className='text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1'>
+							Active Drafts
+						</div>
+						<div className='text-2xl font-bold text-slate-900 dark:text-white font-display'>
+							{stats.drafts}
+						</div>
+					</div>
 				</div>
 
 				<div className='mb-6'>
