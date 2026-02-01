@@ -1,7 +1,21 @@
 'use client'
 
 import type { InvoiceRecord } from '@/types/invoice'
-import { Clock, Download, Eye, Trash2 } from 'lucide-react'
+import {
+	calculateSubtotal,
+	calculateTax,
+	calculateTotal,
+	formatCurrency
+} from '@/utils/helpers'
+import {
+	Clock,
+	Download,
+	Eye,
+	FileText,
+	Trash2,
+	User,
+	Wallet
+} from 'lucide-react'
 
 type InvoiceHistoryProps = {
 	invoices: InvoiceRecord[]
@@ -51,7 +65,11 @@ export default function InvoiceHistory({
 								<div className='font-bold text-lg text-slate-900 dark:text-slate-100 font-display truncate'>
 									{invoice.data.invoiceNumber || 'Untitled'}
 								</div>
-								<div className='text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2'>
+								<div className='font-medium text-sm text-slate-600 dark:text-slate-300 truncate mt-0.5 flex items-center gap-1.5'>
+									<User className='w-3.5 h-3.5 text-slate-400' />
+									{invoice.data.recipient?.name || 'No Client'}
+								</div>
+								<div className='text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5'>
 									<Clock className='w-3 h-3' />
 									{formatDate(invoice.updatedAt)}
 								</div>
@@ -65,6 +83,29 @@ export default function InvoiceHistory({
 							>
 								{invoice.status === 'draft' ? 'Draft' : 'Final'}
 							</span>
+						</div>
+
+						{/* Stats Row */}
+						<div className='flex items-center justify-between pt-3 border-t border-slate-50 dark:border-slate-800/50'>
+							<div className='flex items-center gap-1.5'>
+								<div className='p-1.5 rounded-md bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'>
+									<Wallet className='w-3.5 h-3.5' />
+								</div>
+								<span className='font-bold text-sm text-slate-900 dark:text-white'>
+									{(() => {
+										const subtotal = calculateSubtotal(invoice.data.items || [])
+										const tax = invoice.data.tax
+											? calculateTax(subtotal, invoice.data.tax)
+											: 0
+										return formatCurrency(calculateTotal(subtotal, tax))
+									})()}
+								</span>
+							</div>
+
+							<div className='flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400'>
+								<FileText className='w-3.5 h-3.5' />
+								<span>{(invoice.data.items || []).length} items</span>
+							</div>
 						</div>
 					</div>
 
